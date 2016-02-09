@@ -83,7 +83,9 @@
     "eventemitter2": "~0.4.14",
     "immutable": "~3.7.6",
     "bluebird": "~2.10.2",
-    "intro.js": "~1.1.1"
+    "intro.js": "~1.1.1",
+    "vjs-video": "~0.1.4",
+    "videojs-markers": "~0.5.0"
   },
   "resolutions": {
     "lodash": "~2.4.2",
