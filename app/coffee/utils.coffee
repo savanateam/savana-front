@@ -206,6 +206,10 @@ _.mixin
 isImage = (name) ->
     return name.match(/\.(jpe?g|png|gif|gifv|webm)/i) != null
 
+
+isVideo = (name) ->
+    return name.match(/\.(mp?|avi|mp4)/i) != null
+
 patch = (oldImmutable, newImmutable) ->
     pathObj = {}
 
@@ -242,4 +246,5 @@ taiga.stripTags = stripTags
 taiga.replaceTags = replaceTags
 taiga.defineImmutableProperty = defineImmutableProperty
 taiga.isImage = isImage
+taiga.isVideo = isVideo
 taiga.patch = patch
