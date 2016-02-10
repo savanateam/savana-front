@@ -713,6 +713,8 @@ modules = [
     "pascalprecht.translate",
     "infinite-scroll",
     "tgRepeat",
+
+    # Savana
     "vjs.video"
 ].concat(_.map(pluginsWithModule, (plugin) -> plugin.module))
 
