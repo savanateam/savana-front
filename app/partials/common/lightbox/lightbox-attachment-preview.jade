@@ -2,5 +2,25 @@
     a.close(href="", title="{{'COMMON.CLOSE' | translate}}")
         span.icon.icon-delete
 
-    a(href="{{::file.get('url')}}", title="{{::file.get('description')}}", target="_blank", download="{{::file.get('name')}}")
+    a(  ng-if="type == 'image'"
+        href="{{::file.get('url')}}", title="{{::file.get('description')}}", target="_blank", download="{{::file.get('name')}}")
         img(src="{{::file.get('url')}}")
+
+    div.video-vjs
+
+        vjs-video-container(
+            ng-if="type == 'video'"
+            vjs-markers="file.get('markers')"
+        )
+            p {{::vm.attachment.getIn(['file', 'url'])}}
+            video.video-js.vjs-default-skin(
+            controls
+            preload="auto"
+            width="640"
+            height="264"
+            src="{{ file.get('url') | trusted }}"
+            )
+                source(
+                    type='video/mp4'
+                    src="{{ file.get('url') | trusted }}"
+                )

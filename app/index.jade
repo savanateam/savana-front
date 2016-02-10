@@ -7,12 +7,13 @@ html(lang="en")
 
         // Main meta
         title Taiga
-        meta(name="description", content="Taiga is a project management platform for startups and agile developers & designers who want a simple, beautiful tool that makes work truly enjoyable.")
+        meta(name="description", content="Savana is a project management platform for individual to video broadcasting production & designers who want a simple, beautiful tool that help workflows mapmind.")
         meta(name="keywords", content="agile, scrum, taiga, management, project, developer, designer, user experience")
         meta(http-equiv="X-Frame-Options", content="deny")
 
         //-meta(name="viewport", content="width=device-width, user-scalable=no")
         link(rel="stylesheet", href="/#{v}/styles/theme-taiga.css")
+        link(rel="stylesheet", href="http://vjs.zencdn.net/4.12.13/video-js.css")
         link(rel="icon", type="image/png", href="/#{v}/images/favicon.png")
 
         //- PRERENDER SERVICE: This is to know when the page is completely loaded.
@@ -45,3 +46,5 @@ html(lang="en")
         script(src="/#{v}/js/libs.js")
         script(src="/#{v}/js/templates.js")
         script(src="/#{v}/js/app-loader.js")
+        script.
+            videojs.options.flash.swf = "video-js.swf";
