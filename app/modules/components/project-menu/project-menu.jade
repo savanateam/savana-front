@@ -65,6 +65,16 @@ nav.menu(
                     span.icon.icon-wiki
                     span.helper(translate="PROJECT.SECTION.WIKI")
 
+            li(id="nav-increments")
+                a(
+                    tg-nav="project-increments:project=vm.project.get('slug')"
+                    ng-class="{active: vm.active == 'increments'}"
+                    aria-label="{{'PROJECT.SECTION.INCREMENTS' | translate}}"
+                    tabindex="9"
+                )
+                    span.icon.icon-video
+                    span.helper(translate="PROJECT.SECTION.DROP")
+
             li(id="nav-team")
                 a(
                     tg-nav="project-team:project=vm.project.get('slug')"
