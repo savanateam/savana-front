@@ -115,6 +115,15 @@ urls = {
     "issue-downvote": "/issues/%s/downvote"
     "issue-watch": "/issues/%s/watch"
     "issue-unwatch": "/issues/%s/unwatch"
+	
+	# Product Increments
+    "increments": "/increments"
+    # "bulk-create-issues": "/increments/bulk_create"
+    "increments-filters": "/increments/filters_data"
+    "increments-upvote": "/increments/%s/upvote"
+    "increments-downvote": "/increments/%s/downvote"
+    "increments-watch": "/increments/%s/watch"
+    "increments-unwatch": "/increments/%s/unwatch"
 
     # Wiki pages
     "wiki": "/wiki"
