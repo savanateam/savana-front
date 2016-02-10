@@ -715,6 +715,7 @@ modules = [
     "tgRepeat",
 
     # Savana
+    "savanaIncrements",
     "vjs.video"
 ].concat(_.map(pluginsWithModule, (plugin) -> plugin.module))
 
@@ -751,6 +752,7 @@ module.run([
     init
 ])
 
+# Video
 module.filter 'trusted', [
   '$sce'
   ($sce) ->
