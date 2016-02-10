@@ -210,7 +210,23 @@ configure = ($routeProvider, $locationProvider, $httpProvider, $provide, $tgEven
             section: "issues"
         }
     )
-
+	
+	# Product Increments
+    $routeProvider.when("/project/:pslug/increments",
+        {
+            templateUrl: "increment/increments.html",
+            loader: true,
+            section: "increments"
+        }
+    )
+    $routeProvider.when("/project/:pslug/increment/:incrementref",
+        {
+            templateUrl: "increment/increment-detail.html",
+            loader: true,
+            section: "increments"
+        }
+    )
+	
     # Admin - Project Profile
     $routeProvider.when("/project/:pslug/admin/project-profile/details",
         {
