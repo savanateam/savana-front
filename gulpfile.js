@@ -123,6 +123,7 @@ paths.coffee_order = [
     paths.app + "coffee/modules/tasks/*.coffee",
     paths.app + "coffee/modules/team/*.coffee",
     paths.app + "coffee/modules/wiki/*.coffee",
+    paths.app + "coffee/modules/videoapp/*.coffee",
     paths.app + "coffee/modules/admin/*.coffee",
     paths.app + "coffee/modules/projects/*.coffee",
     paths.app + "coffee/modules/locales/*.coffee",
@@ -169,6 +170,10 @@ paths.libs = [
     paths.vendor + "eventemitter2/lib/eventemitter2.js",
     paths.vendor + "immutable/dist/immutable.js",
     paths.vendor + "intro.js/intro.js",
+    paths.vendor + "video.js/dist/video-js/video.js",
+    paths.vendor + "videojs-markers/dist/videojs-markers.js",
+    paths.vendor + "vjs-video/dist/vjs-video.js",
+
     paths.app + "js/jquery.ui.git-custom.js",
     paths.app + "js/jquery-ui.drag-multiple-custom.js",
     paths.app + "js/jquery.ui.touch-punch.min.js",
@@ -367,7 +372,7 @@ gulp.task("styles-dependencies", function(cb) {
 ##############################################################################
 */
 gulp.task("conf", function() {
-    return gulp.src(["conf/conf.example.json"])
+    return gulp.src(["conf/conf.json"])
         .pipe(gulp.dest(paths.dist));
 });
 
