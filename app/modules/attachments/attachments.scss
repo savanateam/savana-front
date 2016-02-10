@@ -126,3 +126,15 @@
         max-width: 80vw;
     }
 }
+
+.attachment-preview {
+    .video-vjs {
+        min-width: 60vw;
+        max-width: 80vw;
+    }
+
+    vjs-video-container {
+        max-height: 80vh;
+        max-width: 80vw;
+    }
+}

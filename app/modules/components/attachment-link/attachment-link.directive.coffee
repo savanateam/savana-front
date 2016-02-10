@@ -30,6 +30,17 @@ AttachmentLinkDirective = ($parse, lightboxFactory) ->
                         class: 'lightbox lightbox-block'
                     }, {
                         file: attachment.get('file')
+                        type: 'image'
+                    })
+            if taiga.isVideo(attachment.getIn(['file', 'name']))
+                event.preventDefault()
+
+                scope.$apply ->
+                    lightboxFactory.create('tg-lb-attachment-preview', {
+                        class: 'lightbox lightbox-block'
+                    }, {
+                        file: attachment.get('file')
+                        type: 'video'
                     })
 
         scope.$on "$destroy", -> el.off()
