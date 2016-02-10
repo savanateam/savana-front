@@ -211,6 +211,22 @@ configure = ($routeProvider, $locationProvider, $httpProvider, $provide, $tgEven
         }
     )
 
+	# Product Increments
+    $routeProvider.when("/project/:pslug/increments",
+        {
+            templateUrl: "increment/increments.html",
+            loader: true,
+            section: "increments"
+        }
+    )
+    $routeProvider.when("/project/:pslug/increment/:incrementref",
+        {
+            templateUrl: "increment/increment-detail.html",
+            loader: true,
+            section: "increments"
+        }
+    )
+
     # Admin - Project Profile
     $routeProvider.when("/project/:pslug/admin/project-profile/details",
         {
@@ -696,7 +712,8 @@ modules = [
     "ngAria",
     "pascalprecht.translate",
     "infinite-scroll",
-    "tgRepeat"
+    "tgRepeat",
+    "vjs.video"
 ].concat(_.map(pluginsWithModule, (plugin) -> plugin.module))
 
 # Main module definition
@@ -731,3 +748,11 @@ module.run([
     "$route",
     init
 ])
+
+module.filter 'trusted', [
+  '$sce'
+  ($sce) ->
+    (url) ->
+      $sce.trustAsResourceUrl url
+]
+
