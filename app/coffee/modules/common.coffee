@@ -224,6 +224,8 @@ ProjectUrl = ($navurls) ->
             return $navurls.resolve("project-kanban", ctx)
         if project.is_wiki_activated and project.my_permissions.indexOf("view_wiki_pages") > -1
             return $navurls.resolve("project-wiki", ctx)
+        if project.is_wiki_activated and project.my_permissions.indexOf("view_issues") > -1
+            return $navurls.resolve("project-increments", ctx)
         if project.is_issues_activated and project.my_permissions.indexOf("view_issues") > -1
             return $navurls.resolve("project-issues", ctx)
 
