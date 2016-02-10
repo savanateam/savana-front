@@ -223,6 +223,7 @@ module.run([
     "$tgUserstoriesResourcesProvider",
     "$tgTasksResourcesProvider",
     "$tgIssuesResourcesProvider",
+    "$tgIncrementsResourcesProvider",
     "$tgWikiResourcesProvider",
     "$tgSearchResourcesProvider",
     "$tgMdRenderResourcesProvider",
