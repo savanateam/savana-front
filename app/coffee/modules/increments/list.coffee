@@ -1,11 +1,7 @@
 ###
-# Copyright (C) 2014-2016 Andrey Antukh <niwi@niwi.nz>
-# Copyright (C) 2014-2016 Jesús Espino Garcia <jespinog@gmail.com>
-# Copyright (C) 2014-2016 David Barragán Merino <bameda@dbarragan.com>
-# Copyright (C) 2014-2016 Alejandro Alonso <alejandro.alonso@kaleidos.net>
-# Copyright (C) 2014-2016 Juan Francisco Alcántara <juanfran.alcantara@kaleidos.net>
-# Copyright (C) 2014-2016 Xavi Julian <xavier.julian@kaleidos.net>
-#
+# Copyright (C) 2016 Dario Marinoni <marinoni.dario@gmail.com>
+# Copyright (C) 2016 Luca Sturaro <hcsturix74@gmail.com>
+# Heavily inspired by taiga issues (coffee.list)
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
@@ -19,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-# File: modules/issues/list.coffee
+# File: modules/increments/list.coffee
 ###
 
 taiga = @.taiga
@@ -36,10 +32,10 @@ startswith = @.taiga.startswith
 module = angular.module("taigaIncrements")
 
 #############################################################################
-## Issues Controller
+## Increments Controller
 #############################################################################
 
-class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.FiltersMixin)
+class IncrementsController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.FiltersMixin)
     @.$inject = [
         "$scope",
         "$rootScope",
@@ -83,20 +79,21 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         # On Error
         promise.then null, @.onInitialDataError.bind(@)
 
-        @scope.$on "issueform:new:success", =>
-            @analytics.trackEvent("issue", "create", "create issue on issues list", 1)
-            @.loadIssues()
+        @scope.$on "incrementform:new:success", =>
+            @analytics.trackEvent("increment", "create", "create increments on increments list", 1)
+            @.loadIncrements()
 
     initializeSubscription: ->
-        routingKey = "changes.project.#{@scope.projectId}.issues"
+        routingKey = "changes.project.#{@scope.projectId}.increments"
         @events.subscribe @scope, routingKey, (message) =>
-            @.loadIssues()
+            @.loadIncrements()
 
     storeFilters: ->
-        @rs.issues.storeFilters(@params.pslug, @location.search())
+        @rs.increments.storeFilters(@params.pslug, @location.search())
 
     loadProject: ->
         return @rs.projects.getBySlug(@params.pslug).then (project) =>
+			# FIXME: check permission denied for increments and not increments, we are surviving
             if not project.is_issues_activated
                 @location.path(@navUrls.resolve("permission-denied"))
 
@@ -104,22 +101,22 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
             @scope.project = project
             @scope.$emit('project:loaded', project)
 
-            @scope.issueStatusById = groupBy(project.issue_statuses, (x) -> x.id)
-            @scope.issueStatusList = _.sortBy(project.issue_statuses, "order")
-            @scope.severityById = groupBy(project.severities, (x) -> x.id)
-            @scope.severityList = _.sortBy(project.severities, "order")
-            @scope.priorityById = groupBy(project.priorities, (x) -> x.id)
-            @scope.priorityList = _.sortBy(project.priorities, "order")
-            @scope.issueTypes = _.sortBy(project.issue_types, "order")
-            @scope.issueTypeById = groupBy(project.issue_types, (x) -> x.id)
+            # @scope.incrementStatusById = groupBy(project.increment_statuses, (x) -> x.id)
+            # @scope.incrementStatusList = _.sortBy(project.increment_statuses, "order")
+            # @scope.severityById = groupBy(project.severities, (x) -> x.id)
+            # @scope.severityList = _.sortBy(project.severities, "order")
+            # @scope.priorityById = groupBy(project.priorities, (x) -> x.id)
+            # @scope.priorityList = _.sortBy(project.priorities, "order")
+            # @scope.incrementTypes = _.sortBy(project.increment_types, "order")
+            # @scope.incrementTypeById = groupBy(project.increment_types, (x) -> x.id)
 
             return project
 
     getUrlFilters: ->
-        filters = _.pick(@location.search(), "page", "tags", "status", "types",
-                                             "q", "severities", "priorities",
-                                             "assignedTo", "createdBy", "orderBy")
-
+        # filters = _.pick(@location.search(), "page", "tags", "status", "types",
+        #                                      "q", "severities", "priorities",
+        #                                      "assignedTo", "createdBy", "orderBy")
+		filters = _.pick(@location.search(), "page", "tags", "q", "createdBy", "orderBy")
         filters.page = 1 if not filters.page
         return filters
 
@@ -128,7 +125,7 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         return filters[name]
 
     loadMyFilters: ->
-        return @rs.issues.getMyFilters(@scope.projectId).then (filters) =>
+        return @rs.increments.getMyFilters(@scope.projectId).then (filters) =>
             return _.map filters, (value, key) =>
                 return {id: key, name: key, type: "myFilters", selected: false}
 
@@ -185,17 +182,17 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         loadFilters = {}
         loadFilters.project = @scope.projectId
         loadFilters.tags = urlfilters.tags
-        loadFilters.status = urlfilters.status
+        #loadFilters.status = urlfilters.status
         loadFilters.q = urlfilters.q
-        loadFilters.types = urlfilters.types
-        loadFilters.severities = urlfilters.severities
-        loadFilters.priorities = urlfilters.priorities
-        loadFilters.assigned_to = urlfilters.assignedTo
+        #loadFilters.types = urlfilters.types
+        #loadFilters.severities = urlfilters.severities
+        #loadFilters.priorities = urlfilters.priorities
+        #loadFilters.assigned_to = urlfilters.assignedTo
         loadFilters.owner = urlfilters.createdBy
 
         # Load default filters data
         promise = promise.then =>
-            return @rs.issues.filtersData(loadFilters)
+            return @rs.increments.filtersData(loadFilters)
 
         # Format filters and set them on scope
         return promise.then (data) =>
@@ -224,12 +221,12 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
                     return t
 
             # Build filters data structure
-            @scope.filters.status = choicesFiltersFormat(data.statuses, "status", @scope.issueStatusById)
-            @scope.filters.severities = choicesFiltersFormat(data.severities, "severities", @scope.severityById)
-            @scope.filters.priorities = choicesFiltersFormat(data.priorities, "priorities", @scope.priorityById)
-            @scope.filters.assignedTo = usersFiltersFormat(data.assigned_to, "assignedTo", "Unassigned")
+            @scope.filters.status = choicesFiltersFormat(data.statuses, "status", @scope.incrementStatusById)
+            # @scope.filters.severities = choicesFiltersFormat(data.severities, "severities", @scope.severityById)
+            # @scope.filters.priorities = choicesFiltersFormat(data.priorities, "priorities", @scope.priorityById)
+            # @scope.filters.assignedTo = usersFiltersFormat(data.assigned_to, "assignedTo", "Unassigned")
             @scope.filters.createdBy = usersFiltersFormat(data.owners, "createdBy", "Unknown")
-            @scope.filters.types = choicesFiltersFormat(data.types, "types", @scope.issueTypeById)
+            # @scope.filters.types = choicesFiltersFormat(data.types, "types", @scope.incrementTypeById)
             @scope.filters.tags = tagsFilterFormat(data.tags)
 
             @.removeNotExistingFiltersFromUrl()
@@ -238,11 +235,11 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
             @rootscope.$broadcast("filters:loaded", @scope.filters)
 
     # We need to guarantee that the last petition done here is the finally used
-    # When searching by text loadIssues can be called fastly with different parameters and
+    # When searching by text loadIncrements can be called fastly with different parameters and
     # can be resolved in a different order than generated
     # We count the requests made and only if the callback is for the last one data is updated
-    loadIssuesRequests: 0
-    loadIssues: =>
+    loadIncrementsRequests: 0
+    loadIncrements: =>
         @scope.urlFilters = @.getUrlFilters()
 
         # Convert stored filters to http parameters
@@ -252,28 +249,18 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         # additional complexity to code.
         @scope.httpParams = {}
         for name, values of @scope.urlFilters
-            if name == "severities"
-                name = "severity"
-            else if name == "orderBy"
+            if name == "orderBy"
                 name = "order_by"
-            else if name == "priorities"
-                name = "priority"
-            else if name == "assignedTo"
-                name = "assigned_to"
             else if name == "createdBy"
                 name = "owner"
-            else if name == "status"
-                name = "status"
-            else if name == "types"
-                name = "type"
             @scope.httpParams[name] = values
 
-        promise = @rs.issues.list(@scope.projectId, @scope.httpParams)
-        @.loadIssuesRequests += 1
-        promise.index = @.loadIssuesRequests
+        promise = @rs.increments.list(@scope.projectId, @scope.httpParams)
+        @.loadIncrementsRequests += 1
+        promise.index = @.loadIncrementsRequests
         promise.then (data) =>
-            if promise.index == @.loadIssuesRequests
-                @scope.issues = data.models
+            if promise.index == @.loadIncrementsRequests
+                @scope.increments = data.models
                 @scope.page = data.current
                 @scope.count = data.count
                 @scope.paginatedBy = data.paginatedBy
@@ -289,41 +276,41 @@ class IssuesController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
             @.initializeSubscription()
             @.loadFilters()
 
-            return @.loadIssues()
+            return @.loadIncrements()
 
     saveCurrentFiltersTo: (newFilter) ->
         deferred = @q.defer()
-        @rs.issues.getMyFilters(@scope.projectId).then (filters) =>
+        @rs.increments.getMyFilters(@scope.projectId).then (filters) =>
             filters[newFilter] = @location.search()
-            @rs.issues.storeMyFilters(@scope.projectId, filters).then =>
+            @rs.increments.storeMyFilters(@scope.projectId, filters).then =>
                 deferred.resolve()
         return deferred.promise
 
     deleteMyFilter: (filter) ->
         deferred = @q.defer()
-        @rs.issues.getMyFilters(@scope.projectId).then (filters) =>
+        @rs.increments.getMyFilters(@scope.projectId).then (filters) =>
             delete filters[filter]
-            @rs.issues.storeMyFilters(@scope.projectId, filters).then =>
+            @rs.increments.storeMyFilters(@scope.projectId, filters).then =>
                 deferred.resolve()
         return deferred.promise
 
     # Functions used from templates
-    addNewIssue: ->
-        @rootscope.$broadcast("issueform:new", @scope.project)
+    addNewIncrement: ->
+        @rootscope.$broadcast("incrementform:new", @scope.project)
 
-    addIssuesInBulk: ->
-        @rootscope.$broadcast("issueform:bulk", @scope.projectId)
+    # addIncrementsInBulk: ->
+    #    @rootscope.$broadcast("incrementform:bulk", @scope.projectId)
 
 
-module.controller("IssuesController", IssuesController)
+module.controller("IncrementsController", IncrementsController)
 
 #############################################################################
-## Issues Directive
+## Increments Directive
 #############################################################################
 
-IssuesDirective = ($log, $location, $template, $compile) ->
-    ## Issues Pagination
-    template = $template.get("issue/issue-paginator.html", true)
+IncrementsDirective = ($log, $location, $template, $compile) ->
+    ## Increments Pagination
+    template = $template.get("increment/increment-paginator.html", true)
 
     linkPagination = ($scope, $el, $attrs, $ctrl) ->
         # Constants
@@ -332,7 +319,7 @@ IssuesDirective = ($log, $location, $template, $compile) ->
         atBegin = 2
         atEnd = 2
 
-        $pagEl = $el.find(".issues-paginator")
+        $pagEl = $el.find(".increments-paginator")
 
         getNumPages = ->
             numPages = $scope.count / $scope.paginatedBy
@@ -377,35 +364,35 @@ IssuesDirective = ($log, $location, $template, $compile) ->
 
             $pagEl.html(html)
 
-        $scope.$watch "issues", (value) ->
+        $scope.$watch "increments", (value) ->
             # Do nothing if value is not logical true
             return if not value
 
             renderPagination()
 
-        $el.on "click", ".issues-paginator a.next", (event) ->
+        $el.on "click", ".increments-paginator a.next", (event) ->
             event.preventDefault()
 
             $scope.$apply ->
                 $ctrl.selectFilter("page", $scope.page + 1)
-                $ctrl.loadIssues()
+                $ctrl.loadIncrements()
 
-        $el.on "click", ".issues-paginator a.previous", (event) ->
+        $el.on "click", ".increments-paginator a.previous", (event) ->
             event.preventDefault()
             $scope.$apply ->
                 $ctrl.selectFilter("page", $scope.page - 1)
-                $ctrl.loadIssues()
+                $ctrl.loadIncrements()
 
-        $el.on "click", ".issues-paginator li.page > a", (event) ->
+        $el.on "click", ".increments-paginator li.page > a", (event) ->
             event.preventDefault()
             target = angular.element(event.currentTarget)
             pagenum = target.data("pagenum")
 
             $scope.$apply ->
                 $ctrl.selectFilter("page", pagenum)
-                $ctrl.loadIssues()
+                $ctrl.loadIncrements()
 
-    ## Issues Filters
+    ## Increments Filters
     linkOrdering = ($scope, $el, $attrs, $ctrl) ->
         # Draw the arrow the first time
         currentOrder = $ctrl.getUrlFilter("orderBy") or "created_date"
@@ -425,13 +412,13 @@ IssuesDirective = ($log, $location, $template, $compile) ->
             $scope.$apply ->
                 $ctrl.replaceFilter("orderBy", finalOrder)
                 $ctrl.storeFilters()
-                $ctrl.loadIssues().then ->
+                $ctrl.loadIncrements().then ->
                     # Update the arrow
                     $el.find(".row.title > div > span.icon").remove()
                     icon = if startswith(finalOrder, "-") then "icon-arrow-up" else "icon-arrow-bottom"
                     target.html("#{target.html()}<span class='icon #{icon}'></span>")
 
-    ## Issues Link
+    ## Increments Link
     link = ($scope, $el, $attrs) ->
         $ctrl = $el.controller()
         linkOrdering($scope, $el, $attrs, $ctrl)
@@ -442,16 +429,16 @@ IssuesDirective = ($log, $location, $template, $compile) ->
 
     return {link:link}
 
-module.directive("tgIssues", ["$log", "$tgLocation", "$tgTemplate", "$compile", IssuesDirective])
+module.directive("tgIncrements", ["$log", "$tgLocation", "$tgTemplate", "$compile", IncrementsDirective])
 
 
 #############################################################################
-## Issues Filters Directive
+## Increments Filters Directive
 #############################################################################
 
-IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $template, $translate, $compile, $auth) ->
-    template = $template.get("issue/issues-filters.html", true)
-    templateSelected = $template.get("issue/issues-filters-selected.html", true)
+IncrementsFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $template, $translate, $compile, $auth) ->
+    template = $template.get("increments/increments-filters.html", true)
+    templateSelected = $template.get("increments/increments-filters-selected.html", true)
 
     link = ($scope, $el, $attrs) ->
         $ctrl = $el.closest(".wrapper").controller()
@@ -504,22 +491,22 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
         getFiltersType = () ->
             return $el.find("h2 a.subfilter span.title").prop('data-type')
 
-        reloadIssues = () ->
+        reloadIncrements = () ->
             currentFiltersType = getFiltersType()
 
-            $q.all([$ctrl.loadIssues(), $ctrl.loadFilters()]).then () ->
+            $q.all([$ctrl.loadIncrements(), $ctrl.loadFilters()]).then () ->
                 filters = $scope.filters[currentFiltersType]
                 renderFilters(_.reject(filters, "selected"))
 
         toggleFilterSelection = (type, id) ->
             if type == "myFilters"
-                $rs.issues.getMyFilters($scope.projectId).then (data) ->
+                $rs.increments.getMyFilters($scope.projectId).then (data) ->
                     myFilters = data
                     filters = myFilters[id]
                     filters.page = 1
                     $ctrl.replaceAllFilters(filters)
                     $ctrl.storeFilters()
-                    $ctrl.loadIssues()
+                    $ctrl.loadIncrements()
                     $ctrl.markSelectedFilters($scope.filters, filters)
                     initializeSelectedFilters($scope.filters)
                 return null
@@ -546,7 +533,7 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
                 $ctrl.selectFilter("page", 1)
                 $ctrl.storeFilters()
 
-            reloadIssues()
+            reloadIncrements()
 
             renderSelectedFilters(selectedFilters)
 
@@ -559,7 +546,7 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
         $scope.$on "filters:loaded", (ctx, filters) ->
             initializeSelectedFilters(filters)
 
-        $scope.$on "filters:issueupdate", (ctx, filters) ->
+        $scope.$on "filters:incrementupdate", (ctx, filters) ->
             html = template({filters:filters.status})
             html = $compile(html)($scope)
             $el.find(".filter-list").html(html)
@@ -576,12 +563,12 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
                 $ctrl.replaceFilter("q", value)
                 $ctrl.storeFilters()
 
-            reloadIssues()
+            reloadIncrements()
 
-        unwatchIssues = $scope.$watch "issues", (newValue) ->
+        unwatchIncrements = $scope.$watch "increments", (newValue) ->
             if !_.isUndefined(newValue)
                 $scope.$watch("filtersQ", selectQFilter)
-                unwatchIssues()
+                unwatchIncrements()
 
         # Dom Event Handlers
         $el.on "click", ".filters-cats > ul > li > a", (event) ->
@@ -623,8 +610,8 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
 
             target = angular.element(event.currentTarget)
             customFilterName = target.parent().data('id')
-            title = $translate.instant("ISSUES.FILTERS.CONFIRM_DELETE.TITLE")
-            message = $translate.instant("ISSUES.FILTERS.CONFIRM_DELETE.MESSAGE", {customFilterName: customFilterName})
+            title = $translate.instant("INCREMENTS.FILTERS.CONFIRM_DELETE.TITLE")
+            message = $translate.instant("INCREMENTS.FILTERS.CONFIRM_DELETE.MESSAGE", {customFilterName: customFilterName})
 
             $confirm.askOnDelete(title, message).then (askResponse) ->
                 promise = $ctrl.deleteMyFilter(customFilterName)
@@ -688,44 +675,44 @@ IssuesFiltersDirective = ($q, $log, $location, $rs, $confirm, $loading, $templat
 
     return {link:link}
 
-module.directive("tgIssuesFilters", ["$q", "$log", "$tgLocation", "$tgResources", "$tgConfirm", "$tgLoading",
-                                     "$tgTemplate", "$translate", "$compile", "$tgAuth", IssuesFiltersDirective])
+module.directive("tgIncrementsFilters", ["$q", "$log", "$tgLocation", "$tgResources", "$tgConfirm", "$tgLoading",
+                                     "$tgTemplate", "$translate", "$compile", "$tgAuth", IncrementsFiltersDirective])
 
 
 #############################################################################
-## Issue status Directive (popover for change status)
+## Increment status Directive (popover for change status)
 #############################################################################
 
-IssueStatusInlineEditionDirective = ($repo, $template, $rootscope) ->
+IncrementStatusInlineEditionDirective = ($repo, $template, $rootscope) ->
     ###
-    Print the status of an Issue and a popover to change it.
-    - tg-issue-status-inline-edition: The issue
+    Print the status of an Increment and a popover to change it.
+    - tg-increment-status-inline-edition: The increment
 
     Example:
 
-      div.status(tg-issue-status-inline-edition="issue")
-        a.issue-status(href="")
+      div.status(tg-increment-status-inline-edition="increment")
+        a.increment-status(href="")
 
-    NOTE: This directive need 'issueStatusById' and 'project'.
+    NOTE: This directive need 'incrementStatusById' and 'project'.
     ###
-    selectionTemplate = $template.get("issue/issue-status-inline-edition-selection.html", true)
+    selectionTemplate = $template.get("increment/increment-status-inline-edition-selection.html", true)
 
-    updateIssueStatus = ($el, issue, issueStatusById) ->
-        issueStatusDomParent = $el.find(".issue-status")
-        issueStatusDom = $el.find(".issue-status .issue-status-bind")
+    updateIncrementStatus = ($el, increment, incrementStatusById) ->
+        incrementStatusDomParent = $el.find(".increment-status")
+        incrementStatusDom = $el.find(".increment-status .increment-status-bind")
 
-        status = issueStatusById[issue.status]
+        status = incrementStatusById[increment.status]
 
         if status
-            issueStatusDom.text(status.name)
-            issueStatusDom.prop("title", status.name)
-            issueStatusDomParent.css('color', status.color)
+            incrementStatusDom.text(status.name)
+            incrementStatusDom.prop("title", status.name)
+            incrementStatusDomParent.css('color', status.color)
 
     link = ($scope, $el, $attrs) ->
         $ctrl = $el.controller()
-        issue = $scope.$eval($attrs.tgIssueStatusInlineEdition)
+        increment = $scope.$eval($attrs.tgIncrementStatusInlineEdition)
 
-        $el.on "click", ".issue-status", (event) ->
+        $el.on "click", ".increment-status", (event) ->
             event.preventDefault()
             event.stopPropagation()
             $el.find(".pop-status").popover().open()
@@ -736,95 +723,96 @@ IssueStatusInlineEditionDirective = ($repo, $template, $rootscope) ->
             target = angular.element(event.currentTarget)
 
             for filter in $scope.filters.status
-                if filter.id == issue.status
+                if filter.id == increment.status
                     filter.count--
 
-            issue.status = target.data("status-id")
+            increment.status = target.data("status-id")
             $el.find(".pop-status").popover().close()
-            updateIssueStatus($el, issue, $scope.issueStatusById)
+            updateIncrementStatus($el, increment, $scope.incrementStatusById)
 
             $scope.$apply () ->
-                $repo.save(issue).then ->
-                    $ctrl.loadIssues()
+                $repo.save(increment).then ->
+                    $ctrl.loadIncrements()
 
                 for filter in $scope.filters.status
-                    if filter.id == issue.status
+                    if filter.id == increment.status
                         filter.count++
 
-                $rootscope.$broadcast("filters:issueupdate", $scope.filters)
+                $rootscope.$broadcast("filters:incrementupdate", $scope.filters)
 
         taiga.bindOnce $scope, "project", (project) ->
-            $el.append(selectionTemplate({ 'statuses':  project.issue_statuses }))
-            updateIssueStatus($el, issue, $scope.issueStatusById)
+			#FIXME: check for project.increment_statuses
+            #$el.append(selectionTemplate({ 'statuses':  project.increment_statuses }))
+            updateIncrementStatus($el, increment, $scope.incrementStatusById)
 
             # If the user has not enough permissions the click events are unbinded
-            if project.my_permissions.indexOf("modify_issue") == -1
+            if project.my_permissions.indexOf("modify_increment") == -1
                 $el.unbind("click")
                 $el.find("a").addClass("not-clickable")
 
-        $scope.$watch $attrs.tgIssueStatusInlineEdition, (val) =>
-            updateIssueStatus($el, val, $scope.issueStatusById)
+        $scope.$watch $attrs.tgIncrementStatusInlineEdition, (val) =>
+            updateIncrementStatus($el, val, $scope.incrementStatusById)
 
         $scope.$on "$destroy", ->
             $el.off()
 
     return {link: link}
 
-module.directive("tgIssueStatusInlineEdition", ["$tgRepo", "$tgTemplate", "$rootScope",
-                                                IssueStatusInlineEditionDirective])
+module.directive("tgIncrementStatusInlineEdition", ["$tgRepo", "$tgTemplate", "$rootScope",
+                                                IncrementStatusInlineEditionDirective])
 
 
 #############################################################################
-## Issue assigned to Directive
+## Increment assigned to Directive
 #############################################################################
 
-IssueAssignedToInlineEditionDirective = ($repo, $rootscope, $translate) ->
-    template = _.template("""
-    <img src="<%- imgurl %>" alt="<%- name %>"/>
-    <figcaption><%- name %></figcaption>
-    """)
+# IssueAssignedToInlineEditionDirective = ($repo, $rootscope, $translate) ->
+    # template = _.template("""
+    # <img src="<%- imgurl %>" alt="<%- name %>"/>
+    # <figcaption><%- name %></figcaption>
+    # """)
 
-    link = ($scope, $el, $attrs) ->
-        updateIssue = (issue) ->
-            ctx = {
-                name: $translate.instant("COMMON.ASSIGNED_TO.NOT_ASSIGNED"),
-                imgurl: "/#{window._version}/images/unnamed.png"
-            }
+    # link = ($scope, $el, $attrs) ->
+        # updateIssue = (issue) ->
+            # ctx = {
+                # name: $translate.instant("COMMON.ASSIGNED_TO.NOT_ASSIGNED"),
+                # imgurl: "/#{window._version}/images/unnamed.png"
+            # }
 
-            member = $scope.usersById[issue.assigned_to]
-            if member
-                ctx.name = member.full_name_display
-                ctx.imgurl = member.photo
+            # member = $scope.usersById[issue.assigned_to]
+            # if member
+                # ctx.name = member.full_name_display
+                # ctx.imgurl = member.photo
 
-            $el.find(".avatar").html(template(ctx))
-            $el.find(".issue-assignedto").attr('title', ctx.name)
+            # $el.find(".avatar").html(template(ctx))
+            # $el.find(".issue-assignedto").attr('title', ctx.name)
 
-        $ctrl = $el.controller()
-        issue = $scope.$eval($attrs.tgIssueAssignedToInlineEdition)
-        updateIssue(issue)
+        # $ctrl = $el.controller()
+        # issue = $scope.$eval($attrs.tgIssueAssignedToInlineEdition)
+        # updateIssue(issue)
 
-        $el.on "click", ".issue-assignedto", (event) ->
-            $rootscope.$broadcast("assigned-to:add", issue)
+        # $el.on "click", ".issue-assignedto", (event) ->
+            # $rootscope.$broadcast("assigned-to:add", issue)
 
-        taiga.bindOnce $scope, "project", (project) ->
-            # If the user has not enough permissions the click events are unbinded
-            if project.my_permissions.indexOf("modify_issue") == -1
-                $el.unbind("click")
-                $el.find("a").addClass("not-clickable")
+        # taiga.bindOnce $scope, "project", (project) ->
+            # # If the user has not enough permissions the click events are unbinded
+            # if project.my_permissions.indexOf("modify_issue") == -1
+                # $el.unbind("click")
+                # $el.find("a").addClass("not-clickable")
 
-        $scope.$on "assigned-to:added", (ctx, userId, updatedIssue) =>
-            if updatedIssue.id == issue.id
-                updatedIssue.assigned_to = userId
-                $repo.save(updatedIssue)
-                updateIssue(updatedIssue)
+        # $scope.$on "assigned-to:added", (ctx, userId, updatedIssue) =>
+            # if updatedIssue.id == issue.id
+                # updatedIssue.assigned_to = userId
+                # $repo.save(updatedIssue)
+                # updateIssue(updatedIssue)
 
-        $scope.$watch $attrs.tgIssueAssignedToInlineEdition, (val) =>
-            updateIssue(val)
+        # $scope.$watch $attrs.tgIssueAssignedToInlineEdition, (val) =>
+            # updateIssue(val)
 
-        $scope.$on "$destroy", ->
-            $el.off()
+        # $scope.$on "$destroy", ->
+            # $el.off()
 
-    return {link: link}
+    # return {link: link}
 
-module.directive("tgIssueAssignedToInlineEdition", ["$tgRepo", "$rootScope", "$translate"
-                                                    IssueAssignedToInlineEditionDirective])
+# module.directive("tgIssueAssignedToInlineEdition", ["$tgRepo", "$rootScope", "$translate"
+                                                    # IssueAssignedToInlineEditionDirective])
