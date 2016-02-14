@@ -1,0 +1,24 @@
+doctype html
+
+div.wrapper.increments.lightbox-generic-form(tg-increments, ng-controller="IncrementsController as ctrl", ng-init="section='increments'")
+    tg-project-menu
+    sidebar.menu-secondary.extrabar.filters-bar(tg-increments-filters)
+        include ../includes/modules/increments-filters
+
+    section.main.increments-page
+        header
+            include ../includes/components/mainTitle
+
+        include ../includes/modules/increments-options
+        include ../includes/modules/increments-table
+
+        // Paginator is rendered using js.
+        div.paginator.increments-paginator
+
+    div.lightbox.lightbox-select-user(tg-lb-assignedto)
+
+    div.lightbox.lightbox-create-increment(tg-lb-create-increment)
+        include ../includes/modules/lightbox-create-increment
+
+    // div.lightbox.lightbox-generic-bulk(tg-lb-create-bulk-increments)
+    //    include ../includes/modules/lightbox-increment-bulk

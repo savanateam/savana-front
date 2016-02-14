@@ -1,7 +1,7 @@
 window._version = "___VERSION___"
 
 window.taigaConfig = {
-    "api": "http://localhost:8000/api/v1/",
+    "api": "http://savana.loginto.me/api/v1/",
     "eventsUrl": null,
     "eventsMaxMissedHeartbeats": 5,
     "eventsHeartbeatIntervalTime": 60000,
