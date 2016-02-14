@@ -4,52 +4,52 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         div.votes(data-fieldname="total_voters", translate="INCREMENTS.TABLE.COLUMNS.VOTES")
         div.subject(data-fieldname="subject", translate="INCREMENTS.TABLE.COLUMNS.SUBJECT")
         // NOt now - use it for REVIEWED
-		// div.increment-field(data-fieldname="status", translate="INCREMENTS.TABLE.COLUMNS.STATUS")
+        // div.increment-field(data-fieldname="status", translate="INCREMENTS.TABLE.COLUMNS.STATUS")
         div.created-field(data-fieldname="created_date", translate="INCREMENTS.TABLE.COLUMNS.CREATED")
-        
+
     div.row.table-main(
-        ng-repeat="increment in increments track by increment.id"
-        
+    ng-repeat="increment in increments track by increment.id"
+
     )
         div.level-field(tg-listitem-type="increment")
         div.votes(
-            ng-class="{'inactive': !increment.total_voters, 'is-voted': increment.is_voter}"
-            title="{{ 'COMMON.VOTE_BUTTON.COUNTER_TITLE'|translate:{total:increment.total_voters||0}:'messageformat' }}"
+        ng-class="{'inactive': !increment.total_voters, 'is-voted': increment.is_voter}"
+        title="{{ 'COMMON.VOTE_BUTTON.COUNTER_TITLE'|translate:{total:increment.total_voters||0}:'messageformat' }}"
         )
             span.icon.icon-caret-up
             span {{ ::increment.total_voters }}
         div.subject
             a(
-                href=""
-                tg-nav="project-increments-detail:project=project.slug,ref=increment.ref"
-                title="#{{ ::increment.ref }} {{ ::increment.name }}"
+            href=""
+            tg-nav="project-increments-detail:project=project.slug,ref=increment.ref"
+            title="#{{::increment.ref }} {{ ::increment.name }}"
             )
                 span(tg-bo-ref="increment.ref")
-                
+
                 span(ng-bind="increment.name")
 
 
         div.increment-field(tg-increment-status-inline-edition="increment")
             a.increment-status(
-                href=""
-                title="{{'INCREMENTS.TABLE.TITLE_ACTION_CHANGE_STATUS' | translate}}"
+            href=""
+            title="{{'INCREMENTS.TABLE.TITLE_ACTION_CHANGE_STATUS' | translate}}"
             )
                 span.increment-status-bind
                 span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
         div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY HH:mm'")
 
-        
+
 section.empty-increments(ng-if="increments != undefined && increments.length == 0")
     img(
-        src="/#{v}/images/increments-empty.png",
-        alt="{{INCREMENTS.TABLE.EMPTY.TITLE | translate }}"
+    src="/#{v}/images/increments-empty.png",
+    alt="{{INCREMENTS.TABLE.EMPTY.TITLE | translate }}"
     )
     p.title(translate="INCREMENTS.TABLE.EMPTY.TITLE")
     a(
-        href=""
-        ng-click="ctrl.addNewIncrement()"
-        tg-check-permission="add_increment"
-        title="{{ INCREMENTS.ACTION_NEW_INCREMENT | translate }}"
-        translate="INCREMENTS.TABLE.EMPTY.SUBTITLE"
+    href=""
+    ng-click="ctrl.addNewIncrement()"
+    tg-check-permission="add_increment"
+    title="{{ INCREMENTS.ACTION_NEW_INCREMENT | translate }}"
+    translate="INCREMENTS.TABLE.EMPTY.SUBTITLE"
     )

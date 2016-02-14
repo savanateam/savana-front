@@ -1,7 +1,7 @@
 ###
 # Copyright (C) 2016 Dario Marinoni <marinoni.dario@gmail.com>
 # Copyright (C) 2016 Luca Sturaro <hcsturix74@gmail.com>
-# Heavily inspired by taiga issues (coffee.list)
+# Heavily inspired by taiga issues (list.coffee)
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
@@ -29,7 +29,7 @@ bindOnce = @.taiga.bindOnce
 debounceLeading = @.taiga.debounceLeading
 startswith = @.taiga.startswith
 
-module = angular.module("taigaIncrements")
+module = angular.module("savanaIncrements")
 
 #############################################################################
 ## Increments Controller
@@ -116,7 +116,7 @@ class IncrementsController extends mixOf(taiga.Controller, taiga.PageMixin, taig
         # filters = _.pick(@location.search(), "page", "tags", "status", "types",
         #                                      "q", "severities", "priorities",
         #                                      "assignedTo", "createdBy", "orderBy")
-		filters = _.pick(@location.search(), "page", "tags", "q", "createdBy", "orderBy")
+        filters = _.pick(@location.search(), "page", "tags", "q", "createdBy", "orderBy")
         filters.page = 1 if not filters.page
         return filters
 

@@ -5,7 +5,7 @@ section.filters
         form
             fieldset
                 input(type="text", placeholder="{{'INCREMENTS.FILTERS.INPUT_SEARCH_PLACEHOLDER' | translate}}",
-                      ng-model="filtersQ")
+                ng-model="filtersQ")
                 a.icon.icon-search(href="", title="{{'INCREMENTS.FILTERS.TITLE_ACTION_SEARCH' | translate}}")
         div.filters-step-cat
             div.filters-applied
@@ -22,7 +22,7 @@ section.filters
                             span.title(translate="INCREMENTS.FILTERS.CATEGORIES.TYPE")
                             span.icon.icon-arrow-right
                     // - Not now: We'll use this for REVIEWED attribute, reviewd increment
-					//li
+                    //li
                     //    a(href="", title="{{ 'INCREMENTS.FILTERS.CATEGORIES.STATUS' | translate}}", data-type="status")
                     //        span.title(translate="INCREMENTS.FILTERS.CATEGORIES.STATUS")
                     //        span.icon.icon-arrow-right
@@ -36,7 +36,7 @@ section.filters
                             span.icon.icon-arrow-right
                     li.custom-filters(ng-if="filters.myFilters.length")
                         a(href="", title="{{ 'INCREMENTS.FILTERS.CATEGORIES.CUSTOM_FILTERS' | translate}}",
-                          data-type="myFilters")
+                        data-type="myFilters")
                             span.title(translate="INCREMENTS.FILTERS.CATEGORIES.CUSTOM_FILTERS")
                             span.icon.icon-arrow-right
 
