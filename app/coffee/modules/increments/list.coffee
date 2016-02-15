@@ -274,7 +274,7 @@ class IncrementsController extends mixOf(taiga.Controller, taiga.PageMixin, taig
         return promise.then (project) =>
             @.fillUsersAndRoles(project.members, project.roles)
             @.initializeSubscription()
-            @.loadFilters()
+            # @.loadFilters()
 
             return @.loadIncrements()
 
@@ -701,7 +701,7 @@ IncrementStatusInlineEditionDirective = ($repo, $template, $rootscope) ->
         incrementStatusDomParent = $el.find(".increment-status")
         incrementStatusDom = $el.find(".increment-status .increment-status-bind")
 
-        status = incrementStatusById[increment.status]
+        status = '' # incrementStatusById[increment.status]
 
         if status
             incrementStatusDom.text(status.name)
@@ -746,9 +746,9 @@ IncrementStatusInlineEditionDirective = ($repo, $template, $rootscope) ->
             updateIncrementStatus($el, increment, $scope.incrementStatusById)
 
             # If the user has not enough permissions the click events are unbinded
-            if project.my_permissions.indexOf("modify_increment") == -1
-                $el.unbind("click")
-                $el.find("a").addClass("not-clickable")
+#            if project.my_permissions.indexOf("modify_increment") == -1
+#                $el.unbind("click")
+#                $el.find("a").addClass("not-clickable")
 
         $scope.$watch $attrs.tgIncrementStatusInlineEdition, (val) =>
             updateIncrementStatus($el, val, $scope.incrementStatusById)

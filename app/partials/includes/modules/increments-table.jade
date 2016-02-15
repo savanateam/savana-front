@@ -11,7 +11,7 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
     ng-repeat="increment in increments track by increment.id"
 
     )
-        div.level-field(tg-listitem-type="increment")
+        // div.level-field(tg-listitem-type="increment")
         div.votes(
         ng-class="{'inactive': !increment.total_voters, 'is-voted': increment.is_voter}"
         title="{{ 'COMMON.VOTE_BUTTON.COUNTER_TITLE'|translate:{total:increment.total_voters||0}:'messageformat' }}"
