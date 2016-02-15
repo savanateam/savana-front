@@ -2,8 +2,8 @@ doctype html
 
 div.wrapper.increments.lightbox-generic-form(tg-increments, ng-controller="IncrementsController as ctrl", ng-init="section='increments'")
     tg-project-menu
-    // sidebar.menu-secondary.extrabar.filters-bar(tg-increments-filters)
-        // include ../includes/modules/increments-filters
+    sidebar.menu-secondary.extrabar.filters-bar(tg-increments-filters)
+        include ../includes/modules/increments-filters
 
     section.main.increments-page
         header

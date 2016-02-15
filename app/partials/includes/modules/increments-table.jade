@@ -24,7 +24,7 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
             tg-nav="project-increments-detail:project=project.slug,ref=increment.ref"
             title="#{{::increment.ref }} {{ ::increment.name }}"
             )
-                span(tg-bo-ref="increment.ref")
+                //span(tg-bo-ref="increment.ref")
 
                 span(ng-bind="increment.name")
 
@@ -37,7 +37,7 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         //        span.increment-status-bind
         //        span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
-        div.created-field(tg-bo-bind="increment.reviewed'")
+        div.increment-field(ng-bind="increment.reviewed")
         div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY HH:mm'")
 
 

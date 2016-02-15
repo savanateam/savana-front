@@ -1259,7 +1259,7 @@
                 "VOTES": "Votes",
                 "STATUS": "Status",
                 "CREATED": "Created",
-                "ASSIGNED_TO": "Assigned to"
+                "REVIEWED": "Reviewed"
             },
             "TITLE_ACTION_CHANGE_STATUS": "Change status",
             "TITLE_ACTION_ASSIGNED_TO": "Assigned to",
