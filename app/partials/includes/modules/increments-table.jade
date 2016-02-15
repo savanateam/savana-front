@@ -4,7 +4,7 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         div.votes(data-fieldname="total_voters", translate="INCREMENTS.TABLE.COLUMNS.VOTES")
         div.subject(data-fieldname="subject", translate="INCREMENTS.TABLE.COLUMNS.SUBJECT")
         // NOt now - use it for REVIEWED
-        // div.increment-field(data-fieldname="status", translate="INCREMENTS.TABLE.COLUMNS.STATUS")
+        div.increment-field(data-fieldname="reviewed", translate="INCREMENTS.TABLE.COLUMNS.REVIEWED")
         div.created-field(data-fieldname="created_date", translate="INCREMENTS.TABLE.COLUMNS.CREATED")
 
     div.row.table-main(
@@ -29,14 +29,15 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
                 span(ng-bind="increment.name")
 
 
-        div.increment-field(tg-increment-status-inline-edition="increment")
-            a.increment-status(
-            href=""
-            title="{{'INCREMENTS.TABLE.TITLE_ACTION_CHANGE_STATUS' | translate}}"
-            )
-                span.increment-status-bind
-                span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
+        //div.increment-field(tg-increment-status-inline-edition="increment")
+        //    a.increment-status(
+        //    href=""
+        //    title="{{'INCREMENTS.TABLE.TITLE_ACTION_CHANGE_STATUS' | translate}}"
+        //    )
+        //        span.increment-status-bind
+        //        span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
+        div.created-field(tg-bo-bind="increment.reviewed'")
         div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY HH:mm'")
 
 
