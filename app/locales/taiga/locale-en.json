@@ -1204,29 +1204,29 @@
         }
     },
     "INCREMENTS": {
-        "PAGE_TITLE": "Issues - {{projectName}}",
-        "PAGE_DESCRIPTION": "The issues list panel of the project {{projectName}}: {{projectDescription}}",
-        "LIST_SECTION_NAME": "Issues",
-        "SECTION_NAME": "Issue details",
+        "PAGE_TITLE": "Increments - {{projectName}}",
+        "PAGE_DESCRIPTION": "The increments list panel of the project {{projectName}}: {{projectDescription}}",
+        "LIST_SECTION_NAME": "Increments",
+        "SECTION_NAME": "Increment details",
         "ACTION_NEW_ISSUE": "+ NEW ISSUE",
         "ACTION_PROMOTE_TO_US": "Promote to User Story",
         "PLACEHOLDER_FILTER_NAME": "Write the filter name and press enter",
-        "PROMOTED": "This issue has been promoted to US:",
-        "EXTERNAL_REFERENCE": "This issue has been created from",
+        "PROMOTED": "This increment has been promoted to US:",
+        "EXTERNAL_REFERENCE": "This increment has been created from",
         "GO_TO_EXTERNAL_REFERENCE": "Go to origin",
-        "BLOCKED": "This issue is blocked",
-        "TITLE_PREVIOUS_ISSUE": "previous issue",
-        "TITLE_NEXT_ISSUE": "next issue",
-        "ACTION_DELETE": "Delete issue",
-        "LIGHTBOX_TITLE_BLOKING_ISSUE": "Blocking issue",
+        "BLOCKED": "This increment is blocked",
+        "TITLE_PREVIOUS_ISSUE": "previous increment",
+        "TITLE_NEXT_ISSUE": "next increment",
+        "ACTION_DELETE": "Delete increment",
+        "LIGHTBOX_TITLE_BLOKING_ISSUE": "Blocking increment",
         "FIELDS": {
             "PRIORITY": "Priority",
             "SEVERITY": "Severity",
             "TYPE": "Type"
         },
         "CONFIRM_PROMOTE": {
-            "TITLE": "Promote this issue to a new user story",
-            "MESSAGE": "Are you sure you want to create a new US from this Issue?"
+            "TITLE": "Promote this increment to a new user story",
+            "MESSAGE": "Are you sure you want to create a new US from this Increment?"
         },
         "FILTERS": {
             "TITLE": "Filters",
@@ -1265,8 +1265,8 @@
             "TITLE_ACTION_ASSIGNED_TO": "Assigned to",
             "BLOCKED": "Blocked",
             "EMPTY": {
-                "TITLE": "There are no issues to report :-)",
-                "SUBTITLE": "Did you find an issue?"
+                "TITLE": "There are no increments to report :-)",
+                "SUBTITLE": "Did you find an increment?"
             }
         }
     },

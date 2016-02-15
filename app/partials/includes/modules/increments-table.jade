@@ -38,6 +38,10 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         //        span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
         div.increment-field(ng-bind="increment.reviewed")
+        div.increment-field()
+            span.icon.icon-eye-close(ng-show="increment.reviewed")
+            span.icon.icon-eye(ng-show="!increment.reviewed")
+
         div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY HH:mm'")
 
 
