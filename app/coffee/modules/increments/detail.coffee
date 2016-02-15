@@ -69,17 +69,17 @@ class IncrementDetailController extends mixOf(taiga.Controller, taiga.PageMixin)
         promise.then null, @.onInitialDataError.bind(@)
 
     _setMeta: ->
-        title = @translate.instant("ISSUE.PAGE_TITLE", {
+        title = @translate.instant("INCREMENT.PAGE_TITLE", {
             incrementRef: "##{@scope.increment.ref}"
             incrementName: @scope.increment.name
             projectName: @scope.project.name
         })
-        description = @translate.instant("ISSUE.PAGE_DESCRIPTION", {
+        description = @translate.instant("INCREMENT.PAGE_DESCRIPTION", {
 #            incrementStatus: @scope.statusById[@scope.increment.status]?.name or "--"
 #            incrementType: @scope.typeById[@scope.increment.type]?.name or "--"
 #            incrementSeverity: @scope.severityById[@scope.increment.severity]?.name or "--"
 #            incrementPriority: @scope.priorityById[@scope.increment.priority]?.name or "--"
-            incrementDescription: angular.element(@scope.increment.milestone or "").text()
+            #incrementDescription: angular.element(@scope.increment.milestone or "").text()
             incrementDescription: angular.element(@scope.increment.description_html or "").text()
         })
         @appMetaService.setAll(title, description)
