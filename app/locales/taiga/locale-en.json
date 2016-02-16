@@ -1259,10 +1259,12 @@
                 "VOTES": "Votes",
                 "STATUS": "Status",
                 "CREATED": "Created",
-                "REVIEWED": "Reviewed"
+                "REVIEWED": "Reviewed",
+                "OWNER": "Owner"
             },
             "TITLE_ACTION_CHANGE_STATUS": "Change status",
             "TITLE_ACTION_ASSIGNED_TO": "Assigned to",
+            "TITLE_ACTION_OWNER": "Owner",
             "BLOCKED": "Blocked",
             "EMPTY": {
                 "TITLE": "There are no increments to report :-)",

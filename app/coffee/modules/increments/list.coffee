@@ -763,56 +763,56 @@ module.directive("tgIncrementStatusInlineEdition", ["$tgRepo", "$tgTemplate", "$
 
 
 #############################################################################
-## Increment assigned to Directive
+## Increment Owner Directive
 #############################################################################
 
-# IssueAssignedToInlineEditionDirective = ($repo, $rootscope, $translate) ->
-    # template = _.template("""
-    # <img src="<%- imgurl %>" alt="<%- name %>"/>
-    # <figcaption><%- name %></figcaption>
-    # """)
+IncrementOwnerInlineEditionDirective = ($repo, $rootscope, $translate) ->
+    template = _.template("""
+    <img src="<%- imgurl %>" alt="<%- name %>"/>
+    <figcaption><%- name %></figcaption>
+    """)
 
-    # link = ($scope, $el, $attrs) ->
-        # updateIssue = (issue) ->
-            # ctx = {
-                # name: $translate.instant("COMMON.ASSIGNED_TO.NOT_ASSIGNED"),
-                # imgurl: "/#{window._version}/images/unnamed.png"
-            # }
+    link = ($scope, $el, $attrs) ->
+        updateIncrement = (increment) ->
+            ctx = {
+                name: $translate.instant("COMMON.ASSIGNED_TO.NOT_ASSIGNED"),
+                imgurl: "/#{window._version}/images/unnamed.png"
+            }
 
-            # member = $scope.usersById[issue.assigned_to]
-            # if member
-                # ctx.name = member.full_name_display
-                # ctx.imgurl = member.photo
+            member = $scope.usersById[increment.owner]
+            if member
+                ctx.name = member.full_name_display
+                ctx.imgurl = member.photo
 
-            # $el.find(".avatar").html(template(ctx))
-            # $el.find(".issue-assignedto").attr('title', ctx.name)
+            $el.find(".avatar").html(template(ctx))
+            $el.find(".increment-owner").attr('title', ctx.name)
 
-        # $ctrl = $el.controller()
-        # issue = $scope.$eval($attrs.tgIssueAssignedToInlineEdition)
-        # updateIssue(issue)
+        $ctrl = $el.controller()
+        issue = $scope.$eval($attrs.tgIncrementOwnerInlineEdition)
+        updateIncrement(issue)
 
-        # $el.on "click", ".issue-assignedto", (event) ->
-            # $rootscope.$broadcast("assigned-to:add", issue)
+        $el.on "click", ".increment-owner", (event) ->
+            $rootscope.$broadcast("owner:add", issue)
 
-        # taiga.bindOnce $scope, "project", (project) ->
-            # # If the user has not enough permissions the click events are unbinded
-            # if project.my_permissions.indexOf("modify_issue") == -1
-                # $el.unbind("click")
-                # $el.find("a").addClass("not-clickable")
+        taiga.bindOnce $scope, "project", (project) ->
+            # If the user has not enough permissions the click events are unbinded
+            if project.my_permissions.indexOf("modify_increment") == -1
+                $el.unbind("click")
+                $el.find("a").addClass("not-clickable")
 
-        # $scope.$on "assigned-to:added", (ctx, userId, updatedIssue) =>
-            # if updatedIssue.id == issue.id
-                # updatedIssue.assigned_to = userId
-                # $repo.save(updatedIssue)
-                # updateIssue(updatedIssue)
+        $scope.$on "owner:added", (ctx, userId, updatedIncrement) =>
+            if updatedIncrement.id == issue.id
+                updatedIncrement.owner = userId
+                $repo.save(updatedIncrement)
+                updateIncrement(updatedIncrement)
 
-        # $scope.$watch $attrs.tgIssueAssignedToInlineEdition, (val) =>
-            # updateIssue(val)
+        $scope.$watch $attrs.tgIncrementOwnerInlineEdition, (val) =>
+            updateIncrement(val)
 
-        # $scope.$on "$destroy", ->
-            # $el.off()
+        $scope.$on "$destroy", ->
+            $el.off()
 
-    # return {link: link}
+    return {link: link}
 
-# module.directive("tgIssueAssignedToInlineEdition", ["$tgRepo", "$rootScope", "$translate"
-                                                    # IssueAssignedToInlineEditionDirective])
+module.directive("tgIncrementOwnerInlineEdition", ["$tgRepo", "$rootScope", "$translate"
+                                                    IncrementOwnerInlineEditionDirective])

@@ -55,7 +55,7 @@ class IncrementDetailController extends mixOf(taiga.Controller, taiga.PageMixin)
         bindMethods(@)
 
         @scope.incrementRef = @params.incrementref
-        @scope.sectionName = @translate.instant("ISSUES.SECTION_NAME")
+        @scope.sectionName = @translate.instant("INCREMENTS.SECTION_NAME")
         @.initializeEventHandlers()
 
         promise = @.loadInitialData()

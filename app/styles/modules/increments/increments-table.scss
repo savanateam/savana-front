@@ -91,7 +91,7 @@
     }
     .increment-field,
     .created-field ,
-    .assigned-field {
+    .owner-field {
         flex-basis: 140px;
         flex-grow: 1;
         flex-shrink: 0;
@@ -99,11 +99,11 @@
         position: relative;
         text-align: left;
     }
-    .assigned-field {
+    .owner-field {
         flex: 0 0 160px;
         max-width: 160px;
     }
-    .issue-assignedto {
+    .increment-owner {
         cursor: pointer;
         position: relative;
         &:hover {

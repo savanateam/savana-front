@@ -6,10 +6,10 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         // NOt now - use it for REVIEWED
         div.increment-field(data-fieldname="reviewed", translate="INCREMENTS.TABLE.COLUMNS.REVIEWED")
         div.created-field(data-fieldname="created_date", translate="INCREMENTS.TABLE.COLUMNS.CREATED")
+        div.owner-field(data-fieldname="owner", translate="INCREMENTS.TABLE.COLUMNS.OWNER")
 
     div.row.table-main(
     ng-repeat="increment in increments track by increment.id"
-
     )
         // div.level-field(tg-listitem-type="increment")
         div.votes(
@@ -22,7 +22,7 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
             a(
             href=""
             tg-nav="project-increments-detail:project=project.slug,ref=increment.ref"
-            title="#{{::increment.ref }} {{ ::increment.name }}"
+            title="#{{ ::increment.ref }} {{ ::increment.name }}"
             )
                 //span(tg-bo-ref="increment.ref")
 
@@ -37,13 +37,16 @@ section.increments-table.basic-table(ng-class="{empty: !increments.length}")
         //        span.increment-status-bind
         //        span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
-        div.increment-field(ng-bind="increment.reviewed")
         div.increment-field()
             span.icon.icon-eye-close(ng-show="increment.reviewed")
             span.icon.icon-eye(ng-show="!increment.reviewed")
 
-        div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY HH:mm'")
+        div.created-field(tg-bo-bind="increment.created_date|momentFormat:'DD MMM YYYY'")
 
+        div.owner-field(tg-increment-owner-inline-edition="increment")
+            div.increment-owner(title="{{'INCREMENT.TABLE.TITLE_ACTION_OWNER' | translate}}")
+                figure.avatar
+                span.icon.icon-arrow-bottom(tg-check-permission="modify_increment")
 
 section.empty-increments(ng-if="increments != undefined && increments.length == 0")
     img(
