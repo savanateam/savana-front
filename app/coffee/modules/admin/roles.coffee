@@ -409,7 +409,22 @@ RolePermissionsDirective = ($rootscope, $repo, $confirm, $compile) ->
                 name: "COMMON.PERMISIONS_CATEGORIES.WIKI.NAME",
                 permissions: setActivePermissions(wikiPermissions)
             })
-
+			
+			# Adding Increments permissions
+			incrementPermissions = [
+                { key: "view_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.VIEW_INCREMENTS"}
+                { key: "add_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.ADD_INCREMENTS"}
+                { key: "modify_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.MODIFY_INCREMENTS"}
+                { key: "delete_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.DELETE_INCREMENTS"}
+                #{ key: "view_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.VIEW_INCREMENT_MEDIA_COMMENTS"}
+				#{ key: "modify_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.MODIFY_INCREMENT_MEDIA_COMMENTS"}
+                #{ key: "add_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.ADD_INCREMENT_MEDIA_COMMENTS"}
+                #{ key: "delete_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.DELETE_INCREMENT_MEDIA_COMMENTS"}
+            ]
+            categories.push({
+                name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.NAME",
+                permissions: setActivePermissions(incrementPermissions)
+            })
             return setActivePermissionsPerCategory(categories)
 
         renderResume = (element, category) ->

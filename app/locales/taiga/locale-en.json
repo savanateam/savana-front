@@ -261,6 +261,13 @@
                 "VIEW_WIKI_LINKS": "View wiki links",
                 "ADD_WIKI_LINKS": "Add wiki links",
                 "DELETE_WIKI_LINKS": "Delete wiki links"
+            },
+			"INCREMENTS": {
+                "NAME": "Increments",
+                "VIEW_ISSUES": "View increments",
+                "ADD_ISSUES": "Add increments",
+                "MODIFY_ISSUES": "Modify increments",
+                "DELETE_ISSUES": "Delete increments"
             }
         },
         "META": {
