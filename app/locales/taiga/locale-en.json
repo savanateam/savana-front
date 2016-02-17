@@ -264,10 +264,10 @@
             },
 			"INCREMENTS": {
                 "NAME": "Increments",
-                "VIEW_ISSUES": "View increments",
-                "ADD_ISSUES": "Add increments",
-                "MODIFY_ISSUES": "Modify increments",
-                "DELETE_ISSUES": "Delete increments"
+                "VIEW_INCREMENTS": "View increments",
+                "ADD_INCREMENTS": "Add increments",
+                "MODIFY_INCREMENTS": "Modify increments",
+                "DELETE_INCREMENTS": "Delete increments"
             }
         },
         "META": {
