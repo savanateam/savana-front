@@ -29,6 +29,29 @@ body {
 }
 
 
+// mine DM
+.wrapper{
+    flex-wrap: wrap;
+}
+tg-project-menu {
+    width: 100%;
+    height: 60px;
+    flex: 1 0 100%;
+    padding-top: 0px;
+
+}
+
+.main-nav {
+    display: flex;
+    align-items: flex-end;
+    list-style: outside none none;
+    width: auto;
+    justify-content: center;
+}
+
+.menu-secondary.filters-bar {
+    width: auto;
+}
 
 // Titles
 h1,
@@ -163,4 +186,154 @@ tg-project-menu {
     .kanban-uses-box {
         background: $whitish;
     }
+}
+
+
+//*****************************
+//** INFECTTETEDDDD
+//******************************
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 .green {
+    color: #e59e9a;
+}
+
+
+.team-filters nav a.active, .team-filters nav a:hover, .team h2 span:last-child, a:hover, a:visited:hover{
+    color: #E9A49A;
+}
+
+tg-project-menu {
+    background-image: none;
+    background-color: #2e98ad;
+}
+
+.navbar:after {
+    background-image: none;
+    background-color: #9BC6FF;
+}
+
+.menu-tertiary {
+    background-color: #49769d;
+}
+
+.main-nav .active, .summary .data .number{
+    color: #d3e89e;
+}
+
+.main-nav {
+    a {
+        &:hover {
+            color: #d3e89e;
+        }
+    }
+
+    .active svg path {
+        fill: #d3e89e;
+    }
+}
+
+.main-nav a:hover svg path {
+    fill: #d3e89e;
+}
+
+.navbar svg path {
+    fill: #e59e9a;
+}
+
+.admin-submenu {
+    ul {
+         a.active {
+            background-color: #56C1D6;
+        }
+
+        a:hover {
+            background-color: #81D9EA;
+        }
+    }
+}
+
+.button-green, a.button-green {
+    background: #2E98AD;
+}
+
+.button-bulk {
+    background: #4E6480;
+
+    &:hover {
+        background: #6B8DB7;
+    }
+}
+
+.profile-timeline {
+    .activity-item a {
+         color: #4E6480;
+
+        &:hover {
+            color: #2E98AD;
+        }
+    }
+}
+
+.button-green.active, .button-green:hover, a.button-green.active, a.button-green:hover {
+    background: #48BDD4;
+}
+
+.button-gray.active, .button-gray:hover, a.button-gray.active, a.button-gray:hover {
+    background: #ADADAD;
+}
+
+.summary {
+    background: #ADADAD;
+}
+
+.kanban-task, .taskboard-task {
+
+    background: #FDFFEC;
+    border: 1px solid #ACB7A7;
+    border-radius: 10px;
+
+    .task-assigned{
+        color: #2E98AD;
+    }
+
+    .taskboard-tagline {
+        padding: 0 10px;
+    }
+}
+
+.kanban-task-maximized .task-points {
+    color: #2E98AD;
+}
+
+.kanban-task, .taskboard-task {
+}
+
+.us-detail-settings .button-gray.active {
+    background: #D3E89E;
+}
+
+.admin-functionalities .functionality.active {
+    background-color: #D3E89E;
+}
+
+.project-details .privacy-project:checked+label, .lightbox-generic-form .settings .client-requirement input:checked+label, .lightbox-generic-form .settings .iocaine-flag input:checked+label, .lightbox-generic-form .settings .team-requirement input:checked+label {
+    background-color: #BBE64D;
+    border: 1px solid #C0DC6B;
+}
+
+.category-config .summary-role .role-summary-single.active {
+    background: #BBE64D;
+}
+
+.backlog-table-body .doom-line {
+    background: #E59B96;
+}
+
+.sprints .sprint-progress-bar .current-progress, .summary-progress-bar .closed-points-progress, .summary-progress-bar .current-progress {
+    background: #D3E89D;
 }
