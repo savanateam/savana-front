@@ -21,7 +21,7 @@ Resource = (urlsService, http) ->
     service = {}
 
     service.listInAllProjects = (params) ->
-        url = urlsService.resolve("issues")
+        url = urlsService.resolve("increments")
 
         httpOptions = {
             headers: {
@@ -34,7 +34,7 @@ Resource = (urlsService, http) ->
                 return Immutable.fromJS(result.data)
 
     return () ->
-        return {"issues": service}
+        return {"increments": service}
 
 Resource.$inject = ["$tgUrls", "$tgHttp"]
 
