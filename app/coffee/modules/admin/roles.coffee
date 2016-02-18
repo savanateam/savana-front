@@ -410,10 +410,10 @@ RolePermissionsDirective = ($rootscope, $repo, $confirm, $compile) ->
                 permissions: setActivePermissions(wikiPermissions)
             })
             incrementPermissions = [
-                { key: "view_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.VIEW_INCREMENTS" }
-                { key: "add_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.ADD_INCREMENTS" }
-                { key: "modify_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.MODIFY_INCREMENTS" }
-                { key: "delete_increment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.DELETE_INCREMENTS" }
+                { key: "view_productincrements", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.VIEW_INCREMENTS" }
+                { key: "add_productincrement", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.ADD_INCREMENTS" }
+                { key: "modify_productincrement", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.MODIFY_INCREMENTS" }
+                { key: "delete_productincrement", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.DELETE_INCREMENTS" }
                 #{ key: "view_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.VIEW_INCREMENT_MEDIA_COMMENTS"}
                 #{ key: "modify_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.MODIFY_INCREMENT_MEDIA_COMMENTS"}
                 #{ key: "add_increment_comment", name: "COMMON.PERMISIONS_CATEGORIES.INCREMENTS.ADD_INCREMENT_MEDIA_COMMENTS"}
