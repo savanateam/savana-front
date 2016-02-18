@@ -57,7 +57,7 @@ CreateIncrementDirective = ($repo, $confirm, $rootscope, lightboxService, $loadi
 
         createAttachments = (obj) ->
             promises = _.map attachmentsToAdd.toJS(), (attachment) ->
-                return attachmentsService.upload(attachment.file, obj.id, $scope.issue.project, 'issue')
+                return attachmentsService.upload(attachment.file, obj.id, $scope.increment.project, 'increment')
 
             return $q.all(promises)
 

@@ -88,10 +88,11 @@ class IncrementDetailController extends mixOf(taiga.Controller, taiga.PageMixin)
         @scope.$on "attachment:create", =>
             @analytics.trackEvent("attachment", "create", "create attachment on increment", 1)
 
-#        @scope.$on "promote-increment-to-us:success", =>
-#            # @analytics.trackEvent("increment", "promoteToUserstory", "promote increment to userstory", 1)
-#            @rootscope.$broadcast("object:updated")
-#            @.loadIncrement()
+        @scope.$on "promote-increment-to-us:success", =>
+            # @analytics.trackEvent("increment", "promoteToUserstory", "promote increment to userstory", 1)
+            @rootscope.$broadcast("object:updated")
+            # TODO: need to check it out
+            # @.loadIncrement()
 
         @scope.$on "comment:new", =>
             @.loadIncrement()
