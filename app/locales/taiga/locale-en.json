@@ -847,6 +847,9 @@
         "CREATE_ISSUE": {
             "TITLE": "Add Issue"
         },
+        "CREATE_INCREMENT": {
+            "TITLE": "Add Increment"
+        },
         "FEEDBACK": {
             "TITLE": "Tell us something...",
             "COMMENT": "...a bug, some suggestions, something cool... or even your worst nightmare with Taiga",
@@ -1215,7 +1218,7 @@
         "PAGE_DESCRIPTION": "The increments list panel of the project {{projectName}}: {{projectDescription}}",
         "LIST_SECTION_NAME": "Increments",
         "SECTION_NAME": "Increment details",
-        "ACTION_NEW_ISSUE": "+ NEW ISSUE",
+        "ACTION_NEW_INCREMENT": "+ NEW INCREMENT",
         "ACTION_PROMOTE_TO_US": "Promote to User Story",
         "PLACEHOLDER_FILTER_NAME": "Write the filter name and press enter",
         "PROMOTED": "This increment has been promoted to US:",
