@@ -788,11 +788,11 @@ IncrementOwnerInlineEditionDirective = ($repo, $rootscope, $translate) ->
             $el.find(".increment-owner").attr('title', ctx.name)
 
         $ctrl = $el.controller()
-        issue = $scope.$eval($attrs.tgIncrementOwnerInlineEdition)
-        updateIncrement(issue)
+        increment = $scope.$eval($attrs.tgIncrementOwnerInlineEdition)
+        updateIncrement(increment)
 
         $el.on "click", ".increment-owner", (event) ->
-            $rootscope.$broadcast("owner:add", issue)
+            $rootscope.$broadcast("owner:add", increment)
 
         taiga.bindOnce $scope, "project", (project) ->
             # If the user has not enough permissions the click events are unbinded
@@ -801,7 +801,7 @@ IncrementOwnerInlineEditionDirective = ($repo, $rootscope, $translate) ->
                 $el.find("a").addClass("not-clickable")
 
         $scope.$on "owner:added", (ctx, userId, updatedIncrement) =>
-            if updatedIncrement.id == issue.id
+            if updatedIncrement.id == inrcement.id
                 updatedIncrement.owner = userId
                 $repo.save(updatedIncrement)
                 updateIncrement(updatedIncrement)

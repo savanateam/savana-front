@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-# File: modules/issues/lightboxes.coffee
+# File: modules/increments/lightboxes.coffee
 ###
 
 taiga = @.taiga
@@ -31,23 +31,20 @@ module = angular.module("savanaIncrements")
 CreateIncrementDirective = ($repo, $confirm, $rootscope, lightboxService, $loading, $q, attachmentsService) ->
     link = ($scope, $el, $attrs) ->
         form = $el.find("form").checksley()
-        $scope.issue = {}
+        $scope.increment = {}
         $scope.attachments = Immutable.List()
 
-        $scope.$on "issueform:new", (ctx, project)->
+        $scope.$on "incrementform:new", (ctx, project)->
             attachmentsToAdd = Immutable.List()
 
             $el.find(".tag-input").val("")
 
             lightboxService.open($el)
 
-            $scope.issue = {
+            $scope.increment = {
                 project: project.id
-                subject: ""
-                status: project.default_issue_status
-                type: project.default_issue_type
-                priority: project.default_priority
-                severity: project.default_severity
+                name: ""
+                reviewed: false
                 tags: []
             }
 
@@ -79,14 +76,14 @@ CreateIncrementDirective = ($repo, $confirm, $rootscope, lightboxService, $loadi
                 .target(submitButton)
                 .start()
 
-            promise = $repo.create("issues", $scope.issue)
+            promise = $repo.create("increments", $scope.increment)
 
             promise.then (data) ->
                 return createAttachments(data)
 
             promise.then (data) ->
                 currentLoading.finish()
-                $rootscope.$broadcast("issueform:new:success", data)
+                $rootscope.$broadcast("incrementform:new:success", data)
                 lightboxService.close($el)
                 $confirm.notify("success")
 
@@ -112,7 +109,7 @@ module.directive("tgLbCreateIncrement", ["$tgRepo", "$tgConfirm", "$rootScope", 
 
 #CreateBulkIncrementsDirective = ($repo, $rs, $confirm, $rootscope, $loading, lightboxService) ->
 #    link = ($scope, $el, attrs) ->
-#        $scope.$on "issueform:bulk", (ctx, projectId, status)->
+#        $scope.$on "incrementform:bulk", (ctx, projectId, status)->
 #            lightboxService.open($el)
 #            $scope.new = {
 #                projectId: projectId
@@ -133,10 +130,10 @@ module.directive("tgLbCreateIncrement", ["$tgRepo", "$tgConfirm", "$rootScope", 
 #            data = $scope.new.bulk
 #            projectId = $scope.new.projectId
 #
-#            promise = $rs.issues.bulkCreate(projectId, data)
+#            promise = $rs.increments.bulkCreate(projectId, data)
 #            promise.then (result) ->
 #                currentLoading.finish()
-#                $rootscope.$broadcast("issueform:new:success", result)
+#                $rootscope.$broadcast("incrementform:new:success", result)
 #                lightboxService.close($el)
 #                $confirm.notify("success")
 #
