@@ -13,6 +13,7 @@ div.wrapper(
         section.us-story-main-data
             header
                 tg-vote-button.upvote-btn(
+                    ng-show="0"
                     item="increment"
                     on-upvote="ctrl.onUpvote"
                     on-downvote="ctrl.onDownvote"
@@ -20,9 +21,9 @@ div.wrapper(
                 .us-title(ng-class="{blocked: increment.is_blocked}")
                     h2.us-title-text
                         span.us-number(tg-bo-ref="increment.ref")
-                        span.us-name(tg-editable-subject, ng-model="increment", required-perm="modify_increment")
+                        span.us-name(tg-editable-subject, ng-model="increment", required-perm="modify_productincrement")
 
-                    p.us-related-task(ng-if="increment.generated_user_stories.length")
+                    p.hidden.us-related-task(ng-if="increment.generated_user_stories.length")
                         | {{ 'INCREMENTS.PROMOTED'|translate }}
                         a(
                             href=""
@@ -33,7 +34,7 @@ div.wrapper(
                         )
                               span(tg-bo-ref="us.ref")
 
-                    p.external-reference(ng-if="increment.external_reference")
+                    p.hidden.external-reference(ng-if="increment.external_reference")
                         | {{ 'INCREMENTS.EXTERNAL_REFERENCE'|translate }}
                         a(
                             target="_blank"
@@ -58,7 +59,7 @@ div.wrapper(
                             title="{{'INCREMENTS.TITLE_NEXT_ISSUE' | translate}}"
                         )
             .subheader
-                div.tags-block(tg-tag-line, ng-model="increment", required-perm="modify_increment")
+                div.tags-block(tg-tag-line, ng-model="increment", required-perm="modify_productincrement")
                 tg-created-by-display.ticket-created-by(ng-model="increment")
 
         // section.duty-content(tg-editable-description, tg-editable-wysiwyg, ng-model="increment", required-perm="modify_increment")
@@ -78,7 +79,7 @@ div.wrapper(
             project-id="projectId"
         )
 
-        // tg-history(ng-model="increment", type="increment")
+        tg-history(ng-model="increment", type="productincrement")
 
     sidebar.menu-secondary.sidebar.ticket-data
         
