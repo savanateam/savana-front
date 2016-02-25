@@ -139,23 +139,23 @@ class VideoJsController extends taiga.Controller
     div = document.createElement('div')
     if ctrl.vjsMedia.sources
       ctrl.vjsMedia.sources.forEach (curObj) ->
-      curDiv = document.createElement('source')
-      curDiv.setAttribute 'src', curObj.src or ''
-      curDiv.setAttribute 'type', curObj.type or ''
-      div.appendChild curDiv
-      return
+        curDiv = document.createElement('source')
+        curDiv.setAttribute 'src', curObj.src or ''
+        curDiv.setAttribute 'type', curObj.type or ''
+        div.appendChild curDiv
+        return
     if ctrl.vjsMedia.tracks
       ctrl.vjsMedia.tracks.forEach (curObj) ->
-      curDiv = document.createElement('track')
-      curDiv.setAttribute 'kind', curObj.kind or ''
-      curDiv.setAttribute 'label', curObj.label or ''
-      curDiv.setAttribute 'src', curObj.src or ''
-      curDiv.setAttribute 'srclang', curObj.srclang or ''
-      #check for default flag
-      if curObj.default == true
-        curDiv.setAttribute 'default', ''
-      div.appendChild curDiv
-      return
+        curDiv = document.createElement('track')
+        curDiv.setAttribute 'kind', curObj.kind or ''
+        curDiv.setAttribute 'label', curObj.label or ''
+        curDiv.setAttribute 'src', curObj.src or ''
+        curDiv.setAttribute 'srclang', curObj.srclang or ''
+        #check for default flag
+        if curObj.default == true
+          curDiv.setAttribute 'default', ''
+        div.appendChild curDiv
+        return
     #invoke callback
     mediaChangedHandler.call undefined, element: div
     return
@@ -173,25 +173,25 @@ class VideoJsController extends taiga.Controller
     #generate any defined sources or tracks
     generateMedia params, mediaChangedHandler
     #watch for changes to vjs-media
-    mediaWatcher = $scope.$watch((->
+    mediaWatcher = @scope.$watch((->
         params.vjsMedia
       ), (newVal, oldVal) ->
-      if newVal and !angular.equals(newVal, oldVal)
-        #deregister watcher
-        mediaWatcher()
-        if isValidContainer
-          window.videojs(vid).dispose()
-          $scope.$emit 'vjsVideoMediaChanged'
-        else
-          $scope.$emit 'vjsVideoMediaChanged'
-      return
+        if newVal and !angular.equals(newVal, oldVal)
+          #deregister watcher
+          mediaWatcher()
+          if isValidContainer
+            window.videojs(vid).dispose()
+            @scope.$emit 'vjsVideoMediaChanged'
+          else
+            @scope.$emit 'vjsVideoMediaChanged'
+        return
     )
     # bootstrap videojs
     window.videojs vid, opts, ->
       if isValidContainer
         applyRatio element, ratio
       #emit ready event with reference to video
-      $scope.$emit 'vjsVideoReady',
+      @scope.$emit 'vjsVideoReady',
         id: vid.getAttribute('id')
         vid: this
         player: this
@@ -199,7 +199,7 @@ class VideoJsController extends taiga.Controller
       return
 
     #dispose of videojs before destroying directive
-    $scope.$on '$destroy', ->
+    @scope.$on '$destroy', ->
       window.videojs(vid).dispose()
       return
       return
@@ -347,16 +347,16 @@ VideoJSContainerDirective = ($compile, $timeout) ->
       return
 
   return {
-  restrict: 'AE',
-  transclude: true,
-  template: '<div class="vjs-directive-container"><div ng-transclude></div></div>',
-  scope: {
-    vjsSetup: '=?',
-    vjsRatio: '@',
-    vjsMedia: '=?'
-  },
-  controller: 'VjsVideoController',
-  controllerAs: 'vjsCtrl',
-  bindToController: true,
-  link: postLinkContainer
+    restrict: 'AE',
+    transclude: true,
+    template: '<div class="vjs-directive-container"><div ng-transclude></div></div>',
+    scope: {
+      vjsSetup: '=?',
+      vjsRatio: '@',
+      vjsMedia: '=?'
+    },
+    controller: 'VjsVideoController',
+    controllerAs: 'vjsCtrl',
+    bindToController: true,
+    link: postLinkContainer
   }
