@@ -92,7 +92,7 @@ class IncrementDetailController extends mixOf(taiga.Controller, taiga.PageMixin)
             # @analytics.trackEvent("increment", "promoteToUserstory", "promote increment to userstory", 1)
             @rootscope.$broadcast("object:updated")
             # TODO: need to check it out
-            # @.loadIncrement()
+            @.loadIncrement()
 
         @scope.$on "comment:new", =>
             @.loadIncrement()
