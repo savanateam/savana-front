@@ -716,7 +716,9 @@ modules = [
 
     # Savana
     "savanaIncrements",
-    "vjs.video"
+    "savanaMedia.Videojs",
+    # "savanaMedia.Wavesurfer"
+    # "vjs.video"
 ].concat(_.map(pluginsWithModule, (plugin) -> plugin.module))
 
 # Main module definition
