@@ -123,7 +123,7 @@ paths.coffee_order = [
     paths.app + "coffee/modules/tasks/*.coffee",
     paths.app + "coffee/modules/team/*.coffee",
     paths.app + "coffee/modules/wiki/*.coffee",
-    paths.app + "coffee/modules/videoapp/*.coffee",
+    paths.app + "coffee/modules/media/*.coffee",
     paths.app + "coffee/modules/admin/*.coffee",
     paths.app + "coffee/modules/projects/*.coffee",
     paths.app + "coffee/modules/locales/*.coffee",
