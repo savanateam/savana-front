@@ -10,7 +10,7 @@
 taiga = @.taiga
 
 # TODO: create the module first, add it to resource file
-module = angular.module("savanaVideojs")
+module = angular.module("savanaMedia.Videojs")
 
 
 class VideoJsController extends taiga.Controller
@@ -285,7 +285,7 @@ VideoJSDirective = ($compile, $timeout) ->
   }
 
 
-module.directive("VideoJSDirective", ["$compile", "$timeout", VideoJSDirective])
+module.directive("videoJSDirective", ["$compile", "$timeout", VideoJSDirective])
 
 
 VideoJSContainerDirective = ($compile, $timeout) ->
