@@ -135,6 +135,7 @@ urls = {
     "history/issue": "/history/issue"
     "history/task": "/history/task"
     "history/wiki": "/history/wiki"
+    "history/productincrement": "/history/productincrement"
 
     # Attachments
     "attachments/us": "/userstories/attachments"
