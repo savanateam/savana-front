@@ -1,5 +1,3 @@
-'use strict'
-
 ###*
 # @ngdoc overview
 # @name vjsVideoApp
@@ -21,8 +19,8 @@ class VideoJsController extends taiga.Controller
   ]
 
   constructor: (@scope) ->
-    @.initVideoJs = initVideoJs
-    @.getVidElement = getVidElement
+    @scope.initVideoJs = initVideoJs
+    @scope.getVidElement = getVidElement
 
   getVersion: ->
     if window.videojs and window.videojs.VERSION then window.videojs.VERSION else '0.0.0'
@@ -293,58 +291,57 @@ module.directive("VideoJSDirective", ["$compile", "$timeout", VideoJSDirective])
 VideoJSContainerDirective = ($compile, $timeout) ->
 
   postLinkContainer = (scope, element, attrs, ctrl, transclude) ->
-    postLink = (scope, element, attrs, ctrl, transclude) ->
-      vid = undefined
-      origContent = undefined
+    vid = undefined
+    origContent = undefined
 
-      mediaChangedHandler = (e) ->
-        vidEl = element[0].querySelector('video')
-        if vidEl
-          #remove any inside contents
-          while vidEl.firstChild
-            vidEl.removeChild vidEl.firstChild
-          #add generated sources and tracks
-          while e.element.childNodes.length > 0
-            vidEl.appendChild e.element.childNodes[0]
-        return
+    mediaChangedHandler = (e) ->
+      vidEl = element[0].querySelector('video')
+      if vidEl
+        #remove any inside contents
+        while vidEl.firstChild
+          vidEl.removeChild vidEl.firstChild
+        #add generated sources and tracks
+        while e.element.childNodes.length > 0
+          vidEl.appendChild e.element.childNodes[0]
+      return
 
-      init = ->
-        vid = ctrl.getVidElement(element, true)
-        #we want to confirm that the vjs-video directive or
-        #any corresponding attributes are not defined on the
-        #internal video element
-        if vid.getAttribute('vjs-video') != null
-          throw new Error('vjs-video should not be used on the video ' + 'tag when using vjs-video-container!')
-        #we also want to make sure that no vjs-* attributes
-        #are included on the internal video tag
-        if vid.getAttribute('vjs-setup') != null or vid.getAttribute('vjs-media') != null or vid.getAttribute('vjs-ratio') != null
-          throw new Error('directive attributes should not be used on ' + 'the video tag when using vjs-video-container!')
-        #check if video.js version 5.x is running
-        if ctrl.getVersion().match(/^5\./)
-          if ctrl.vjsRatio
-            if !ctrl.vjsSetup
-              ctrl.vjsSetup = {}
-            ctrl.vjsSetup.aspectRatio = ctrl.vjsRatio
-        else
-          #set width and height of video to auto
-          vid.setAttribute 'width', 'auto'
-          vid.setAttribute 'height', 'auto'
-        #bootstrap video js
-        ctrl.initVideoJs vid, ctrl, element, mediaChangedHandler
-        return
+    init = ->
+      vid = ctrl.getVidElement(element, true)
+      #we want to confirm that the vjs-video directive or
+      #any corresponding attributes are not defined on the
+      #internal video element
+      if vid.getAttribute('vjs-video') != null
+        throw new Error('vjs-video should not be used on the video ' + 'tag when using vjs-video-container!')
+      #we also want to make sure that no vjs-* attributes
+      #are included on the internal video tag
+      if vid.getAttribute('vjs-setup') != null or vid.getAttribute('vjs-media') != null or vid.getAttribute('vjs-ratio') != null
+        throw new Error('directive attributes should not be used on ' + 'the video tag when using vjs-video-container!')
+      #check if video.js version 5.x is running
+      if ctrl.getVersion().match(/^5\./)
+        if ctrl.vjsRatio
+          if !ctrl.vjsSetup
+            ctrl.vjsSetup = {}
+          ctrl.vjsSetup.aspectRatio = ctrl.vjsRatio
+      else
+        #set width and height of video to auto
+        vid.setAttribute 'width', 'auto'
+        vid.setAttribute 'height', 'auto'
+      #bootstrap video js
+      ctrl.initVideoJs vid, ctrl, element, mediaChangedHandler
+      return
 
-      #save original content
-      transclude (content) ->
-        origContent = content.clone()
-        return
-      scope.$on 'vjsVideoMediaChanged', ->
-        #replace element children with orignal content
-        element.children().remove()
-        element.append origContent.clone()
-        init()
-        return
+    #save original content
+    transclude (content) ->
+      origContent = content.clone()
+      return
+    scope.$on 'vjsVideoMediaChanged', ->
+      #replace element children with orignal content
+      element.children().remove()
+      element.append origContent.clone()
       init()
       return
+    init()
+    return
 
   return {
     restrict: 'AE',

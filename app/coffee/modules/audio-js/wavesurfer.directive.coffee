@@ -1,5 +1,3 @@
-'use strict'
-
 ###*
 # @ngdoc overview
 # @name vjsVideoApp
@@ -34,8 +32,8 @@ class WavesurferController extends taiga.Controller
   ]
 
   constructor: (@scope) ->
-    @.initWavesurferJs = initWavesurferJs
-    @.getAudioElement = getAudioElement
+    @scope.initWavesurferJs = initWavesurferJs
+    @scope.getAudioElement = getAudioElement
 
 
   getVersion: ->
@@ -118,32 +116,32 @@ WavesurferDirective = ($interval, $window) ->
     return
 
   return {
-    restrict : 'AE',
-      scope    : {
-          url     : '=',
-          options : '='
-      },
-      template :
-        '<div class="row">' +
-            '<div class="col-xs-12 wave-control-wrap">' +
-                '<button class="bw-btn" ng-click="bw()">' +
-                '</button>' +
-                '<button ng-class="{\'play-btn\': !playing, \'pause-btn\': playing}" ng-click="playpause()">' +
-                '</button>' +
-                '<button class="ff-btn" ng-click="ff()">' +
-                '</button>' +
-                '<span class="sound-duration pull-left">' +
-                    '<span>{{moment | hms}}</span> / <span>{{length | hms}}</span>' +
-                '</span>' +
-                '<div class="waveform" id="{{::uniqueId}}">' +
-                '</div>' +
-                '<span ng-class="{\'volume-100\' : volume_level > 50, \'volume-50\' : volume_level > 0 && volume_level <= 50, \'volume-0\' : volume_level === 0}" id="player">' +
-                    '<span class="audio-volume" id="volume" style="width: 75%">' +
-                    '</span>' +
-                '</span>' +
-            '</div>' +
-        '</div>',
-      link : postWsLink
+    restrict : 'AE'
+    scope: {
+      url     : '='
+      options : '='
+    }
+    template :
+      '<div class="row">' +
+          '<div class="col-xs-12 wave-control-wrap">' +
+              '<button class="bw-btn" ng-click="bw()">' +
+              '</button>' +
+              '<button ng-class="{\'play-btn\': !playing, \'pause-btn\': playing}" ng-click="playpause()">' +
+              '</button>' +
+              '<button class="ff-btn" ng-click="ff()">' +
+              '</button>' +
+              '<span class="sound-duration pull-left">' +
+                  '<span>{{moment | hms}}</span> / <span>{{length | hms}}</span>' +
+              '</span>' +
+              '<div class="waveform" id="{{::uniqueId}}">' +
+              '</div>' +
+              '<span ng-class="{\'volume-100\' : volume_level > 50, \'volume-50\' : volume_level > 0 && volume_level <= 50, \'volume-0\' : volume_level === 0}" id="player">' +
+                  '<span class="audio-volume" id="volume" style="width: 75%">' +
+                  '</span>' +
+              '</span>' +
+          '</div>' +
+      '</div>'
+    link : postWsLink
   }
 
 module.directive("WavesurferDirective", ["$interval", "$window", WavesurferDirective])
