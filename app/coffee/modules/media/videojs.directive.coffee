@@ -12,19 +12,18 @@ taiga = @.taiga
 # TODO: create the module first, add it to resource file
 module = angular.module("savanaMedia.Videojs")
 
+getVersion = ->
+  if window.videojs and window.videojs.VERSION then window.videojs.VERSION else '0.0.0'
 
 class VideoJsController extends taiga.Controller
+
   @.$inject = [
     "$scope"
   ]
 
   constructor: (@scope) ->
-    @scope.initVideoJs = initVideoJs
-    @scope.getVidElement = getVidElement
-
-  getVersion: ->
-    if window.videojs and window.videojs.VERSION then window.videojs.VERSION else '0.0.0'
-
+    @scope.initVideoJs = @.initVideoJs
+    @scope.getVidElement = @.getVidElement
 
   getVidElement: (element, isContainer) ->
     vid = null
@@ -45,20 +44,9 @@ class VideoJsController extends taiga.Controller
         throw new Error('directive must be attached to a video tag!')
     vid
 
-# TODO: This is useful for user and promise, child class for annotator?
-# loadInitialData: ->
-# promise = @.loadProject()
-# return promise.then (project) =>
-# @.fillUsersAndRoles(project.members, project.roles)
-# @.fillUsersAndRoles(project.members, project.roles)
-# @.initializeSubscription()
-# return @.loadIssues()
-
-
-  applyRatio: (el, ratioVal) ->
+  applyRatio = (el, ratioVal) ->
     ratio = ratioVal
     style = document.createElement('style')
-
     parseRatio = (r) ->
       tokens = r.split(':')
       tokenErrorMsg = 'the ratio must either be "wide", "standard" or ' + 'decimal values in the format of w:h'
@@ -81,7 +69,7 @@ class VideoJsController extends taiga.Controller
       else
         #vjsId = 'vjs-container-default';
         throw new Error('Failed to find instance of video-js class!')
-      #add generated id to container
+      # add generated id to container
       element[0].setAttribute 'id', vjsId
       vjsId
 
@@ -160,62 +148,108 @@ class VideoJsController extends taiga.Controller
 
   initVideoJs: (vid, params, element, mediaChangedHandler) ->
     opts = params.vjsSetup or {}
+    markers = params.vjsMarkers or []
     ratio = params.vjsRatio
     isValidContainer = if element[0].nodeName != 'VIDEO' and !getVersion().match(/^5\./) then true else false
     mediaWatcher = undefined
+    console.log "bootstrap video"
     if !window.videojs
       return null
-    #override poster settings if defined in vjsMedia
+    # override poster settings if defined in vjsMedia
     if params.vjsMedia and params.vjsMedia.poster
       opts.poster = params.vjsMedia.poster
-    #generate any defined sources or tracks
+    # generate any defined sources or tracks
     generateMedia params, mediaChangedHandler
     #watch for changes to vjs-media
     mediaWatcher = @scope.$watch((->
-        params.vjsMedia
-      ), (newVal, oldVal) ->
-        if newVal and !angular.equals(newVal, oldVal)
-          #deregister watcher
-          mediaWatcher()
-          if isValidContainer
-            window.videojs(vid).dispose()
-            @scope.$emit 'vjsVideoMediaChanged'
-          else
-            @scope.$emit 'vjsVideoMediaChanged'
-        return
+      params.vjsMedia
+    ), (newVal, oldVal) ->
+      if newVal and !angular.equals(newVal, oldVal)
+        #deregister watcher
+        mediaWatcher()
+        if isValidContainer
+          window.videojs(vid).dispose()
+          @scope.$emit 'vjsVideoMediaChanged'
+        else
+          @scope.$emit 'vjsVideoMediaChanged'
+      return
     )
-
+    console.log "bootstrap video"
     # bootstrap videojs
-    window.videojs vid, opts, ->
+
+    window.videojs( vid, opts, ->
       if isValidContainer
         applyRatio element, ratio
       #emit ready event with reference to video
-      @scope.$emit 'vjsVideoReady',
+      angular.forEach( params.vjsMarkers, ( (value, key) ->
+        @push value.get('data')
+        return
+      ), markers)
+
+      @scope.$emit( 'vjsVideoReady',
         id: vid.getAttribute('id')
-        vid: this
-        player: this
+        vid: @
+        player: @
         controlBar: @controlBar
+      )
+    )
+
+    console.log "bootstrap annotator"
+    options =
+      optionsAnnotator:
+        permissions: {}
+        store:
+          prefix: 'http://danielcebrian.com/annotations/api'
+          annotationData:
+            uri: 'http://danielcebrian.com/annotations/demo.html'
+          loadFromSearch:
+            limit: 10000
+            uri: 'http://danielcebrian.com/annotations/demo.html'
+        richText:
+          tinymce:
+            selector: 'li.annotator-item textarea'
+            plugins: 'media image insertdatetime link code'
+            menubar: false
+            toolbar_items_size: 'small'
+            extended_valid_elements: 'iframe[src|frameborder|style|scrolling|class|width|height|name|align|id]'
+            toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media rubric | code '
+        share: {}
+        annotator: {}
+      optionsVideoJS:
+        techOrder: [
+          'html5'
+          'flash'
+          'youtube'
+        ]
+      optionsRS: {}
+      optionsOVA:
+        posBigNew: 'none'
+
+    console.log "oooooo2"
+    ova = new (OpenVideoAnnotation.Annotator)($('#airlock'), options)
+    #change the user (Experimental)
+    ova.setCurrentUser $('#username').val()
+    $('#username').change ->
+      ova.setCurrentUser $(this).val()
       return
 
-    angular.forEach params.vjsMarkers, ((value, key) ->
-      @push value.get('data')
-      return
-    ), markers
     if markers.count > 0
       video.markers markers: markers
+
     #dispose of videojs before destroying directive
     $scope.$on '$destroy', ->
       window.videojs(vid).dispose()
       return
     return
 
-    #dispose of videojs before destroying directive
-    @scope.$on '$destroy', ->
-      window.videojs(vid).dispose()
-      return
-      return
-
-
+  # TODO: This is useful for user and promise, child class for annotator?
+  loadInitialData = ->
+    promise = @.loadProject()
+    return promise.then (project) =>
+      @.fillUsersAndRoles(project.members, project.roles)
+      @.fillUsersAndRoles(project.members, project.roles)
+      @.initializeSubscription()
+      return @.loadIssues()
 
 
 module.controller("VideoJsController", VideoJsController)
@@ -232,7 +266,7 @@ VideoJSDirective = ($compile, $timeout) ->
     compiledEl = undefined
 
     mediaChangedHandler = (e) ->
-      #remove any inside contents
+#remove any inside contents
       element.children().remove()
       #add generated sources and tracks
       element.append e.element.childNodes
@@ -242,8 +276,8 @@ VideoJSDirective = ($compile, $timeout) ->
       vid = ctrl.getVidElement(element)
       #check if video.js version 5.x is running
       if getVersion().match(/^5\./)
-        #if vjsRatio is defined,
-        #add it to the vjsSetup options
+#if vjsRatio is defined,
+#add it to the vjsSetup options
         if ctrl.vjsRatio
           if !ctrl.vjsSetup
             ctrl.vjsSetup = {}
@@ -267,7 +301,7 @@ VideoJSDirective = ($compile, $timeout) ->
     parentContainer = element.parent()
 
     scope.$on 'vjsVideoMediaChanged', ->
-      #retreive base element that video.js creates
+#retreive base element that video.js creates
       staleChild = parentContainer.children()[0]
       #remove current directive instance
       #destroy will trigger a video.js dispose
@@ -287,26 +321,25 @@ VideoJSDirective = ($compile, $timeout) ->
 
   #TODO: Check better scope here....
   return {
-  restrict: 'A'
-  transclude: true
-  scope: {
-    vjsSetup: '=?'
-    vjsRatio: '@'
-    vjsMedia: '=?'
-    vjsMarkers: '=?'
-  }
-  controller: 'VideoJsController'
-  controllerAs: 'vjsCtrl'
-  bindToController: true
-  link: postLink
+    restrict: 'A'
+    transclude: true
+    scope: {
+      vjsSetup: '=?'
+      vjsRatio: '@'
+      vjsMedia: '=?'
+      vjsMarkers: '=?'
+    }
+    controller: 'VideoJsController'
+    controllerAs: 'vjsCtrl'
+    bindToController: true
+    link: postLink
   }
 
 
-module.directive("videoJSDirective", ["$compile", "$timeout", VideoJSDirective])
+module.directive("vjsVideo", ["$compile", "$timeout", VideoJSDirective])
 
 
 VideoJSContainerDirective = ($compile, $timeout) ->
-
   postLinkContainer = (scope, element, attrs, ctrl, transclude) ->
     vid = undefined
     origContent = undefined
@@ -314,7 +347,7 @@ VideoJSContainerDirective = ($compile, $timeout) ->
     mediaChangedHandler = (e) ->
       vidEl = element[0].querySelector('video')
       if vidEl
-        #remove any inside contents
+#remove any inside contents
         while vidEl.firstChild
           vidEl.removeChild vidEl.firstChild
         #add generated sources and tracks
@@ -333,32 +366,32 @@ VideoJSContainerDirective = ($compile, $timeout) ->
       #are included on the internal video tag
       if vid.getAttribute('vjs-setup') != null or vid.getAttribute('vjs-media') != null or vid.getAttribute('vjs-ratio') != null
         throw new Error('directive attributes should not be used on ' + 'the video tag when using vjs-video-container!')
+
       #check if video.js version 5.x is running
-      if ctrl.getVersion().match(/^5\./)
+      if getVersion().match(/^5\./)
         if ctrl.vjsRatio
           if !ctrl.vjsSetup
             ctrl.vjsSetup = {}
           ctrl.vjsSetup.aspectRatio = ctrl.vjsRatio
       else
-        #set width and height of video to auto
+#set width and height of video to auto
         vid.setAttribute 'width', 'auto'
         vid.setAttribute 'height', 'auto'
-      #bootstrap video js
+      # bootstrap video js
       ctrl.initVideoJs vid, ctrl, element, mediaChangedHandler
       return
 
     #save original content
-    transclude (content) ->
+    transclude((content) ->
       origContent = content.clone()
-      return
+    )
     scope.$on 'vjsVideoMediaChanged', ->
-      #replace element children with orignal content
+#replace element children with orignal content
       element.children().remove()
       element.append origContent.clone()
       init()
-      return
+
     init()
-    return
 
   return {
     restrict: 'AE',
@@ -367,10 +400,13 @@ VideoJSContainerDirective = ($compile, $timeout) ->
     scope: {
       vjsSetup: '=?',
       vjsRatio: '@',
-      vjsMedia: '=?'
+      vjsMedia: '=?',
+      vjsMarkers: '=?'
     },
-    controller: 'VjsVideoController',
+    controller: 'VideoJsController',
     controllerAs: 'vjsCtrl',
     bindToController: true,
     link: postLinkContainer
   }
+
+module.directive("vjsVideoContainer", ["$compile", "$timeout", VideoJSContainerDirective])
