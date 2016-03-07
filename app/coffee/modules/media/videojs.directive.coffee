@@ -184,6 +184,7 @@ class VideoJsController extends taiga.Controller
             @scope.$emit 'vjsVideoMediaChanged'
         return
     )
+
     # bootstrap videojs
     window.videojs vid, opts, ->
       if isValidContainer
@@ -196,11 +197,26 @@ class VideoJsController extends taiga.Controller
         controlBar: @controlBar
       return
 
+    angular.forEach params.vjsMarkers, ((value, key) ->
+      @push value.get('data')
+      return
+    ), markers
+    if markers.count > 0
+      video.markers markers: markers
+    #dispose of videojs before destroying directive
+    $scope.$on '$destroy', ->
+      window.videojs(vid).dispose()
+      return
+    return
+
     #dispose of videojs before destroying directive
     @scope.$on '$destroy', ->
       window.videojs(vid).dispose()
       return
       return
+
+
+
 
 module.controller("VideoJsController", VideoJsController)
 
@@ -277,6 +293,7 @@ VideoJSDirective = ($compile, $timeout) ->
     vjsSetup: '=?'
     vjsRatio: '@'
     vjsMedia: '=?'
+    vjsMarkers: '=?'
   }
   controller: 'VideoJsController'
   controllerAs: 'vjsCtrl'

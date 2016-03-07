@@ -8,9 +8,10 @@
 ###
 
 taiga = @.taiga
+module = angular.module("taigaProject")
 
 # TODO: create the module first, add it to resource file
-angular.module("savanaWavesurfer", []).filter 'hms', ->
+angular.module("savanaMedia.Wavesurfer", []).filter 'hms', ->
   (str) ->
     sec_num = parseInt(str, 10)
     hours = Math.floor(sec_num / 3600)
@@ -144,4 +145,4 @@ WavesurferDirective = ($interval, $window) ->
     link : postWsLink
   }
 
-module.directive("WavesurferDirective", ["$interval", "$window", WavesurferDirective])
+module.directive("wavesurferDirective", ["$interval", "$window", WavesurferDirective])
