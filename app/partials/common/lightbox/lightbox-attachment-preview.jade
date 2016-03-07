@@ -1,26 +1,37 @@
 .attachment-preview
     a.close(href="", title="{{'COMMON.CLOSE' | translate}}")
         span.icon.icon-delete
+    div(style="min-width:80vw;")
+        div(style="width:70%;")
+            a(  ng-if="type == 'image'"
+                href="{{::file.get('url')}}", title="{{::file.get('description')}}", target="_blank", download="{{::file.get('name')}}")
+                img(src="{{::file.get('url')}}")
 
-    a(  ng-if="type == 'image'"
-        href="{{::file.get('url')}}", title="{{::file.get('description')}}", target="_blank", download="{{::file.get('name')}}")
-        img(src="{{::file.get('url')}}")
-
-    div.video-vjs
-
-        vjs-video-container(
-            ng-if="type == 'video'"
-            vjs-markers="file.get('markers')"
-        )
-            p {{::vm.attachment.getIn(['file', 'url'])}}
-            video.video-js.vjs-default-skin(
-            controls
-            preload="auto"
-            width="640"
-            height="264"
-            src="{{ file.get('url') | trusted }}"
-            )
-                source(
-                    type='video/mp4'
-                    src="{{ file.get('url') | trusted }}"
+            div.video-vjs
+                vjs-video-container(
+                    ng-if="type == 'video'"
+                    vjs-markers="file.get('markers')"
                 )
+                    p {{::vm.attachment.getIn(['file', 'url'])}}
+                    video.video-js.vjs-default-skin(
+                        controls
+                        preload="metadata"
+                        loop
+                        width="640"
+                        height="264"
+                        src="{{ file.get('url') | trusted }}"
+                    )
+                        source(
+                            type='video/mp4'
+                            src="{{ file.get('url') | trusted }}"
+                        )
+        div(style="width:30%;")
+            div.markers
+                div.marker(
+                    ng-repeat="marker in file.get('markers')"
+                )
+                    div()
+                        p.data(ng-bind="marker.data") 1
+                        p.data(ng-bind="marker.id") 1
+                        p.data() 1
+                        p.data(ng-bind="marker.get('id')") 1
