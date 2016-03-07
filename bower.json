@@ -85,7 +85,11 @@
     "bluebird": "~2.10.2",
     "intro.js": "~1.1.1",
     "vjs-video": "~0.1.4",
-    "videojs-markers": "~0.5.0"
+    "videojs-markers": "~0.5.0",
+    "rangeslider-videojs": "https://github.com/danielcebrian/rangeslider-videojs.git",
+    "angular-annotator": "~0.1.0",
+    "annotator": "~1.2.9",
+    "OpenVideoAnnotation": "https://github.com/CtrHellenicStudies/OpenVideoAnnotation.git"
   },
   "resolutions": {
     "lodash": "~2.4.2",

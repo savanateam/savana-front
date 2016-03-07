@@ -170,16 +170,23 @@ paths.libs = [
     paths.vendor + "eventemitter2/lib/eventemitter2.js",
     paths.vendor + "immutable/dist/immutable.js",
     paths.vendor + "intro.js/intro.js",
-    paths.vendor + "video.js/dist/video-js/video.js",
-    paths.vendor + "videojs-markers/dist/videojs-markers.js",
-    paths.vendor + "vjs-video/dist/vjs-video.js",
-
     paths.app + "js/jquery.ui.git-custom.js",
     paths.app + "js/jquery-ui.drag-multiple-custom.js",
     paths.app + "js/jquery.ui.touch-punch.min.js",
     paths.app + "js/tg-repeat.js",
     paths.app + "js/sha1-custom.js",
-    paths.app + "js/murmurhash3_gc.js"
+    paths.app + "js/murmurhash3_gc.js",
+
+    paths.vendor + "annotator/annotator-full.min.js",
+    paths.vendor + "OpenVideoAnnotation/lib/video-js/video.min.js",
+    paths.vendor + "OpenVideoAnnotation/lib/video-js/vjs.youtube.js",
+    paths.vendor + "OpenVideoAnnotation/lib/rangeslider.min.js",
+    paths.vendor + "OpenVideoAnnotation/lib/geolocation-annotator.min.js",
+    paths.vendor + "OpenVideoAnnotation/lib/tinymce/tinymce.min.js",
+    paths.vendor + "OpenVideoAnnotation/lib/richText-annotator.min.js",
+    // paths.vendor + "videojs-markers/dist/videojs-markers.js",
+    // paths.vendor + "vjs-video/dist/vjs-video.js",
+    paths.vendor + "OpenVideoAnnotation/src/ova.js"
 ];
 
 var isDeploy = argv["_"].indexOf("deploy") !== -1;
